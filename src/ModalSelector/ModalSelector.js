@@ -17,16 +17,20 @@ class ModalSelector extends WixComponent {
     onCancel: PropTypes.func,
     loadMore: PropTypes.func,
     hasMore: PropTypes.bool,
+    initialLoad: PropTypes.bool,
     enableOk: PropTypes.bool,
     height: PropTypes.string,
     prefixContent: PropTypes.node,
     footerStatus: PropTypes.node,
+    loader: PropTypes.node
   }
 
   static defaultProps = {
     loadMore: () => {},
     hasMore: false,
-    height: '540px'
+    initialLoad: false,
+    height: '540px',
+    loader: <div className="loader">Loading ...</div>
   }
 
   render() {
@@ -38,9 +42,11 @@ class ModalSelector extends WixComponent {
       onCancel,
       loadMore,
       hasMore,
+      initialLoad,
       enableOk,
       footerStatus,
       prefixContent,
+      loader,
       children
     } = this.props;
 
@@ -61,6 +67,9 @@ class ModalSelector extends WixComponent {
           <InfiniteScroll
             loadMore={loadMore}
             hasMore={hasMore}
+            initialLoad={initialLoad}
+            useWindow={false}
+            loader={loader}
             >
             {children}
           </InfiniteScroll>
