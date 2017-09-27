@@ -54,6 +54,23 @@ fdescribe('ModalSelector', () => {
     });
   });
 
+  describe('controls', () => {
+    it(`should disable the ok button by default`, () => {
+      props.isOpen = true;
+
+      const driver = createDriver(<ModalSelector {...props}/>);
+      expect(driver.isOkEnabled()).toBe(false);
+    });
+
+    it(`should enable the ok button`, () => {
+      props.isOpen = true;
+      props.enableOk = true;
+
+      const driver = createDriver(<ModalSelector {...props}/>);
+      expect(driver.isOkEnabled()).toBe(true);
+    });
+  });
+
   describe('callbacks', () => {
     it(`should trigger the onClose function when clicking the close button`, () => {
       props.onClose = sinon.spy();
@@ -66,6 +83,7 @@ fdescribe('ModalSelector', () => {
 
     it(`should trigger the onOk function when clicking the ok button`, () => {
       props.onOk = sinon.spy();
+      props.enableOk = true;
 
       const driver = createDriver(<ModalSelector {...props}/>);
       driver.clickOnOk();

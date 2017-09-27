@@ -2,7 +2,7 @@
 // import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 
-const modalSelectorDriverFactory = (/*{element, wrapper, component}*/) => {
+const modalSelectorDriverFactory = () => {
 
   const getPortal = () => document.body.querySelector('.portal');
   const getCloseButton = () => document.body.querySelector('[data-hook="header-close-button"]');
@@ -13,6 +13,7 @@ const modalSelectorDriverFactory = (/*{element, wrapper, component}*/) => {
   return {
     exists: () => !!(getPortal()),
     isOpen: () => !!(getContent()),
+    isOkEnabled: () => !getOkButton().disabled,
     getChildBySelector: selector => getPortal().querySelector(selector),
     clickOnClose: () => {
       ReactTestUtils.Simulate.click(getCloseButton());

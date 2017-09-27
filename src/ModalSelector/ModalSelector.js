@@ -30,7 +30,8 @@ class ModalSelector extends WixComponent {
     hasMore: false,
     initialLoad: false,
     height: '540px',
-    loader: <div className="loader">Loading ...</div>
+    loader: <div className="loader">Loading ...</div>,
+    enableOk: false
   }
 
   render() {
