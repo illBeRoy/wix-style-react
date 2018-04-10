@@ -1,21 +1,15 @@
-import story from 'story';
 import React from 'react';
+import {storiesOf} from '@storybook/react';
 
-import Text from 'wix-style-react/Text';
-import Badge from 'wix-style-react/Badge';
+import CodeExample from 'wix-storybook-utils/CodeExample';
+import ControlledBadgeExample from './Example';
+import ControlledBadgeExampleRaw from '!raw-loader!./Example';
 
-story({
-  category: 'Core',
-  componentSrcFolder: 'Badge',
-  componentProps: {
-    children: 'I\'m a Badge!',
-    dataHook: 'storybook-badge'
-  },
-  examples: (
+storiesOf('12. Other', module)
+  .add('12.1 Badge', () =>
     <div>
-      <Text appearance="H0">I fly with alignment <Badge alignment="top">top</Badge></Text>
-      <Text appearance="H0">I squeeze to <Badge>middle</Badge> by default</Text>
-      <Text appearance="H0">I go down with alignment <Badge alignment="bottom">bottom</Badge></Text>
+      <CodeExample title="Badge" code={ControlledBadgeExampleRaw}>
+        <ControlledBadgeExample/>
+      </CodeExample>
     </div>
-  )
-});
+  );

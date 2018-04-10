@@ -6,6 +6,7 @@ import {inputAreaTestkitFactory, tooltipTestkitFactory} from '../../testkit';
 import {inputAreaTestkitFactory as enzymeInputAreaTestkitFactory} from '../../testkit/enzyme';
 import sinon from 'sinon';
 import {isTestkitExists, isEnzymeTestkitExists} from '../../testkit/test-common';
+import {mount} from 'enzyme';
 
 describe('InputArea', () => {
   const createDriver = createDriverFactory(inputAreaDriverFactory);
@@ -61,13 +62,13 @@ describe('InputArea', () => {
   });
 
 
-  describe('hasCounter attribute', () => {
-    it('should pass down to the wrapped input', () => {
-      const driver = createDriver(<InputAreaForTesting hasCounter/>);
-      expect(driver.getHasCounter()).toBeTruthy();
+  describe('counter', () => {
+    it('should show correct value when hasCounter and maxLength present', () => {
+      const driver = createDriver(<InputAreaForTesting hasCounter maxLength={30} value={'abc'}/>);
+      expect(driver.getCounterValue()).toEqual('3/30');
     });
 
-    it('should pass down to the wrapped input with default false value', () => {
+    it('should not show counter when hasCounter is not present', () => {
       const driver = createDriver(<InputAreaForTesting/>);
       expect(driver.getHasCounter()).toBeFalsy();
     });
@@ -372,6 +373,6 @@ describe('enzyme testkit', () => {
   it('should exist', () => {
     const value = 'hello';
     const onChange = () => {};
-    expect(isEnzymeTestkitExists(<InputArea dataHook="texarea-div" value={value} onChange={onChange}/>, enzymeInputAreaTestkitFactory)).toBe(true);
+    expect(isEnzymeTestkitExists(<InputArea dataHook="texarea-div" value={value} onChange={onChange}/>, enzymeInputAreaTestkitFactory, mount)).toBe(true);
   });
 });

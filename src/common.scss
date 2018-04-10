@@ -1,3 +1,5 @@
+@import './common/Focusable/FocusableMixins.scss';
+
 /* Fonts */
 $fonts-fallback: "Helvetica Neue", "Helvetica", "Arial", "メイリオ, meiryo", "ヒラギノ角ゴ pro w3", "hiragino kaku gothic pro", "sans-serif";
 
@@ -10,27 +12,28 @@ $FontBold: "HelveticaNeueW01-75Bold", "HelveticaNeueW02-75Bold", "HelveticaNeueW
 
 
 @mixin FontUltraThin() {
-	font-family: $FontUltraThin;
+  font-family: $FontUltraThin;
 }
 
 @mixin FontThin() {
-	font-family: $FontThin;
+  font-family: $FontThin;
 }
 @mixin FontLight() {
-	font-family: $FontLight;
+  font-family: $FontLight;
 }
 
 @mixin FontRoman() {
-	font-family: $FontRoman;
+  font-family: $FontRoman;
 }
 
 @mixin FontMedium() {
-	font-family: $FontMedium;
+  font-family: $FontMedium;
 }
 
 @mixin FontBold() {
-	font-family: $FontBold;
+  font-family: $FontBold;
 }
+
 
 /* New swatches! */
 
@@ -55,6 +58,8 @@ $B40: #daeffe;   // Dividers, table selected
 $B50: #eaf7ff;   // Dividers
 $B60: #f4fafe;   // Table hover
 
+$F00:  #aadbfc;  // Focus Outline
+
 $GR10: #c8c8c8;  // Disabled buttons
 $GR20: #dadada;  // Disabled fields
 $GR30: #f1f1f1;  // Disabled background
@@ -67,6 +72,7 @@ $P10: #aa4dc8;   // Wix premium
 $P20: #cd68ed;
 $P30: #e5c9ee;
 $P40: #eedbf4;
+$P50: #faeeff;   // Section Helper
 
 $O00: #ea5f0e;
 $O10: #fb7d33;
@@ -76,14 +82,16 @@ $R00: #d6453d;
 $R05: #d8504c;   // CTA
 $R10: #ee5951;   // Errors, CTA hover
 $R20: #ff6666;   // Notifications
-$R30: #ffd7d7;   // Notifications
+$R30: #ffd7d7;   // Notifications, Focus Errors
 $R40: #ffe1e1;
+$R50: #ffebeb;   // Section Helper
 
 $G00: #44823f;
 $G05: #61ad5a;   // CTA
 $G10: #60bc57;   // CTA hover
 $G20: #80c979;   // Notifications
 $G30: #c9eebc;   // Notifications
+$G50: #edf9e5;   // Section Helper
 
 $Y00: #c68801;
 $Y05: #eda200;   // CTA
@@ -91,8 +99,14 @@ $Y10: #fdb10c;   // CTA hover
 $Y20: #fac249;   // Notifications
 $Y30: #fef0ba;   // Notifications
 $Y40: #fef4cd;
+$Y50: #fff9e1;   // Section Helper
 
 $WR00: #e05050;  // Wix Restaurant red
+
+
+
+
+// TODO: The lower part is to be deprecated. DEPRECATED!
 
 $paletteB1  : #3899EC;
 $paletteB2  : #4EB7F5;

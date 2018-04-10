@@ -1,5 +1,18 @@
 @import '../common.scss';
+@import '../common/Focusable/Focusable';
+
 $transition-speed:.3s;
+$activeBackgroundColor: $B10;
+$inactiveFocusedBackgroundColor: $B20;
+$hoverBackgroundColor: $B20;
+
+@mixin backgroundColor($color) {
+    background: $color;
+
+    path {
+        fill: $color;
+    }
+}
 
 .toggleSwitch {
     display: inline-block;
@@ -10,7 +23,7 @@ $transition-speed:.3s;
 }
 
 .toggleSwitch input[type=checkbox]:checked + .outerLabel {
-    background: #3899eb;
+    background: $activeBackgroundColor;
     .innerLabel {
         left:   23px;
         .toggleActive {
@@ -21,6 +34,10 @@ $transition-speed:.3s;
             display:none;
             transition: all $transition-speed cubic-bezier(0,1,0,1);
         }
+    }
+
+    &:hover {
+        @include backgroundColor($hoverBackgroundColor);
     }
 
     &.disabled {
@@ -39,13 +56,28 @@ $transition-speed:.3s;
     display:    inline-block;
     width:      45px;
     height:     24px;
-    background: #b0def8;
+    background: $B40;
     position:   relative;
     cursor:     pointer;
+    outline: none;
 
     &.disabled {
         cursor: default;
         background: $GR10;
+    }
+
+    &:hover {
+        @include backgroundColor($hoverBackgroundColor);
+    }
+}
+
+.toggleSwitch#{$focusable-focus-visible} {
+    .outerLabel {
+        @include FocusBox;
+
+        &:not(&:hover) {
+            @include backgroundColor($inactiveFocusedBackgroundColor);
+        }
     }
 }
 
@@ -101,7 +133,7 @@ $transition-speed:.3s;
     transition: all $transition-speed cubic-bezier(0,1,0,1);
 
     path {
-        fill:#3899eb;
+        fill: $activeBackgroundColor;
     }
 
     &.disabled {
@@ -117,7 +149,7 @@ $transition-speed:.3s;
     height: 6px;
 
     path {
-        fill:#6daae3;
+        fill:$B40;
     }
 
     &.disabled {

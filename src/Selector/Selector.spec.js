@@ -80,6 +80,43 @@ describe('Selector', () => {
     expect(driver.toggleType()).toBe(toggleType);
   });
 
+  it('should not propagate when selecting a disabled selector', () => {
+    const onToggle = jest.fn();
+    const toggleType = 'radio';
+    const props = {...defaultProps, ...{toggleType}};
+    const driver = createDriver(<Selector onToggle={onToggle} {...props} isDisabled/>);
+
+    driver.toggle();
+
+    expect(onToggle).not.toHaveBeenCalled();
+  });
+
+  describe('given image size', () => {
+    const sizesAndTestkitMethods = [
+      ['tiny', 'isImageTiny'],
+      ['small', 'isImageSmall'],
+      ['portrait', 'isImagePortrait'],
+      ['large', 'isImageLarge'],
+      ['cinema', 'isImageCinema']
+    ];
+
+    sizesAndTestkitMethods.forEach(([size, method]) => {
+      it(`should set correct className for "${size}"`, () => {
+        const driver = createDriver(
+          <Selector
+            {...{
+              ...defaultProps,
+              imageSize: size,
+              image: <img src="img.png"/>
+            }}
+            />
+        );
+
+        expect(driver[method](size)).toBe(true);
+      });
+    });
+  });
+
   describe('testkit', () => {
     it('should exist', () => {
       const div = document.createElement('div');

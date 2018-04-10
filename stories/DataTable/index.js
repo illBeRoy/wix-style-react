@@ -13,13 +13,16 @@ import ExampleRaw from '!raw-loader!./Example';
 import ExampleCallingServer from './ExampleCallingServer';
 import ExampleCallingServerRaw from '!raw-loader!./ExampleCallingServer';
 
+import ExampleWithoutHeader from './ExampleWithoutHeader';
+import ExampleWithoutHeaderRaw from '!raw-loader!./ExampleWithoutHeader';
+
 import ExampleWithAnimatedRowDetails from './ExampleWithAnimatedRowDetails';
 import ExampleWithAnimatedRowDetailsRaw from '!raw-loader!./ExampleWithAnimatedRowDetails';
 import ExampleSortable from './ExampleSortable';
 import ExampleSortableRaw from '!raw-loader!./ExampleSortable';
 
-storiesOf('Core', module)
-  .add('DataTable', () => (
+storiesOf('10. Tables', module)
+  .add('10.1 DataTable', () => (
     <TabbedView tabs={['API', 'TestKits']}>
       <div>
         <Markdown source={Readme}/>
@@ -32,6 +35,9 @@ storiesOf('Core', module)
         </CodeExample>
         <CodeExample title="With sorting" code={ExampleSortableRaw}>
           <ExampleSortable/>
+        </CodeExample>
+        <CodeExample title="Without header" code={ExampleWithoutHeaderRaw}>
+          <ExampleWithoutHeader/>
         </CodeExample>
         <CodeExample title="With server calling (up to 100 items)" code={ExampleCallingServerRaw}>
           <ExampleCallingServer/>

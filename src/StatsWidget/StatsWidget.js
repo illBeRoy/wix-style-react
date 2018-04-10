@@ -6,7 +6,7 @@ import styles from './StatsWidget.scss';
 import Text from '../Text';
 import classnames from 'classnames';
 import ArrowVertical from '../Icons/dist/components/ArrowVertical';
-import Dropdown from '../Dropdown';
+import ButtonWithOptions from '../ButtonWithOptions';
 
 /**
  * Component for app widget in Business Manager
@@ -34,26 +34,29 @@ class StatsWidget extends WixComponent {
     })
   };
 
-  renderPercentage(percent) {
+  _renderPercentage(percent) {
     return (<Text appearance="H3">
-      <div className={classnames(styles.percents, {[styles.isNegative]: percent < 0}, {[styles.isPositive]: percent > 0})} data-hook="percent-wrapper">
+      <div
+        className={classnames(styles.percents, {[styles.isNegative]: percent < 0}, {[styles.isPositive]: percent > 0})}
+        data-hook="percent-wrapper"
+        >
         <span className={classnames(styles.percentArrow)}><ArrowVertical/></span>
         <span data-hook="percent-value">{Math.abs(percent)}%</span>
       </div>
     </Text>);
   }
 
-  renderColumn(statistics, index) {
+  _renderColumn(statistics, index) {
     return (<div className={styles.statsColumn} key={index} data-hook="statistics-item">
       <Text dataHook="statistics-item-title" appearance="H1">{statistics.title}</Text>
       <Text dataHook="statistics-item-subtitle" appearance="H3">
         {statistics.subtitle}
       </Text>
-      { typeof (statistics.percent) !== 'undefined' && this.renderPercentage(statistics.percent)}
+      {typeof (statistics.percent) === 'number' && this._renderPercentage(statistics.percent)}
     </div>);
   }
 
-  renderFilters(filters) {
+  _renderFilters(filters) {
     return (<div className={styles.filtersWrapper}>{filters}</div>);
   }
 
@@ -62,10 +65,14 @@ class StatsWidget extends WixComponent {
 
     return (
       <Card>
-        <Card.Header dataHook="stats-widget-title" title={title} suffix={this.renderFilters(children)}/>
+        <Card.Header
+          dataHook="stats-widget-title"
+          title={title}
+          suffix={this._renderFilters(children)}
+          />
         <Card.Content>
           <div className={styles.statsColumnWrapper} data-hook="stats-widget-content-wrapper">
-            {statistics.map((stat, index) => this.renderColumn(stat, index))}
+            {statistics.map((stat, index) => this._renderColumn(stat, index))}
           </div>
         </Card.Content>
       </Card>
@@ -73,7 +80,7 @@ class StatsWidget extends WixComponent {
   }
 }
 
-StatsWidget.Filter = Dropdown;
+StatsWidget.Filter = ButtonWithOptions;
 
 StatsWidget.displayName = 'StatsWidget';
 

@@ -1,7 +1,9 @@
 @import '../../src/common';
 
-$page-margin: 48px;
-$page-background-color: rgba($D70,.95);
+$page-side-padding: 48px;
+$scroll-top-threshold: 20px;
+$page-background-color: rgba($D70, .95);
+$image-container-offset: 30px;
 
 .page {
   flex: 1 1 auto;
@@ -13,21 +15,19 @@ $page-background-color: rgba($D70,.95);
 
 .page-header-container {
   padding-top: 30px;
+  padding-bottom: $scroll-top-threshold;
   position: absolute;
   z-index: 2;
   min-height: 30px;
-  transition: padding .2s cubic-bezier(0.4, 0.0, 0.2, 1);
   box-sizing: border-box;
   margin: 0 auto;
   left: 0;
-  right: 0;
-    
+  width: 100%;
+  z-index: 2001;
+
   &.minimized {
     padding-top: 18px;
     padding-bottom: 18px;
-  }
-
-  &.with-background-color {
     background-color: $page-background-color;
   }
 
@@ -37,14 +37,13 @@ $page-background-color: rgba($D70,.95);
 }
 
 .page-header {
-  padding: 0 $page-margin;
+  padding: 0 $page-side-padding;
   margin: 0 auto;
 }
 
 .tail {
   background-color: transparent;
-  padding: 18px $page-margin 0;
-  transition: padding .2s cubic-bezier(0.4, 0.0, 0.2, 1);  
+  padding: $scroll-top-threshold $page-side-padding 0;
   margin: 0 auto;
 
   &.minimized {
@@ -56,6 +55,8 @@ $page-background-color: rgba($D70,.95);
   overflow: auto;
   width: 100%;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .image-background {
@@ -63,8 +64,28 @@ $page-background-color: rgba($D70,.95);
   background-size: cover;
   background-position: center;
   position: absolute;
+  top: -$image-container-offset;
+  bottom: -$image-container-offset;
+  left: -$image-container-offset;
+  right: -$image-container-offset;
+  filter: blur(12px);
+}
+
+.image-background-container {
+  position: absolute;
+  overflow: hidden;
   top: 0;
   width: 100%;
+  height: 100%;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba($D10, 0.42);
+  }
 }
 
 .gradient-background {
@@ -73,15 +94,18 @@ $page-background-color: rgba($D70,.95);
   width: 100%;
 }
 
-.image-background-overlay {
-  width: 100%;
-  height: 100%;
-  background-color: rgba($D10, 0.36);
+.content {
+  position: relative;
+  padding: 0 $page-side-padding;
+  margin: 0 auto;
 }
 
-.content {
-  z-index: 1;
-  position: relative;
-  margin: 0 auto;
-  padding: 0 $page-margin;
+.content-placeholder {
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.content-full-screen {
+  padding-left: 0;
+  padding-right: 0;
 }

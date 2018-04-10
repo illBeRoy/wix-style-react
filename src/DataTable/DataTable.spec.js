@@ -14,9 +14,9 @@ describe('Table', () => {
     id: 'id',
     data: [{a: 'value 1', b: 'value 2'}, {a: 'value 3', b: 'value 4'}],
     columns: [
-      {title: 'Row Num', render: (row, rowNum) => rowNum},
-      {title: 'A', render: row => row.a},
-      {title: 'B', render: row => row.b}
+        {title: 'Row Num', render: (row, rowNum) => rowNum},
+        {title: 'A', render: row => row.a},
+        {title: 'B', render: row => row.b}
     ],
     rowClass: 'class-name'
   };
@@ -26,14 +26,54 @@ describe('Table', () => {
     expect(driver.hasChildWithId(defaultProps.id)).toBeTruthy();
   });
 
-  it('should display nothing when data is empty', () => {
-    const props = {
-      ...defaultProps,
-      data: []
-    };
+  describe('data is empty', () => {
+    const rowDataHook = 'row-data-hook';
+    const props = Object.assign({}, defaultProps, {
+      data: [],
+      rowDataHook
+    });
 
     const driver = createDriver(<DataTable {...props}/>);
-    expect(driver.isDisplayingNothing()).toBeTruthy();
+
+    it('should display nothing', () => {
+      expect(driver.isDisplayingNothing()).toBeTruthy();
+    });
+
+    it('should count 0 rows', () => {
+      expect(driver.getRowsCount()).toEqual(0);
+    });
+
+    it('should count 0 rows with class name', () => {
+      expect(driver.getRowsWithClassCount(defaultProps.rowClass)).toEqual(0);
+    });
+
+    it('should find 0 rows with data-hook', () => {
+      expect(driver.getRowsWithDataHook(rowDataHook).length).toEqual(0);
+    });
+
+    it('should not find a row with data-hook', () => {
+      expect(driver.getRowWithDataHook(rowDataHook)).toEqual(null);
+    });
+
+    it('should not a header only', () => {
+      expect(driver.isDisplayingHeaderOnly()).toBeFalsy;
+    });
+
+    it('should not a header ', () => {
+      expect(driver.isDisplayingHeader()).toBeFalsy;
+    });
+
+    it('should not find a child with id', () => {
+      expect(driver.hasChildWithId(defaultProps.id)).toBeFalsy;
+    });
+
+    // There rest of the driver's methods would throw some error
+
+  });
+
+  it('should display something when data is non-empty', () => {
+    const driver = createDriver(<DataTable {...defaultProps}/>);
+    expect(driver.isDisplayingNothing()).toBeFalsy();
   });
 
   it('should display header only when data is empty and showHeaderWhenEmpty is true', () => {
@@ -50,6 +90,37 @@ describe('Table', () => {
   it('should render column titles', () => {
     const driver = createDriver(<DataTable {...defaultProps}/>);
     expect(driver.getTitles()).toEqual(defaultProps.columns.map(col => col.title));
+  });
+
+  describe('column width', () => {
+    const columns = [
+      {title: 'Row Num', width: '30%', render: (row, rowNum) => rowNum},
+      {title: 'A', width: '40px', render: row => row.a},
+      {title: 'B', width: '50px', render: row => row.b}
+    ];
+
+    it('should apply column.width', () => {
+      const driver = createDriver(<DataTable {...defaultProps} columns={columns}/>);
+      columns.forEach((column, colIndex) => {
+        expect(driver.getHeaderCellWidth(colIndex), 'header cell width').toEqual(column.width);
+        for (let rowIndex = 0; rowIndex < driver.getRowsCount(); rowIndex++) {
+          expect(driver.getCellWidth(rowIndex, colIndex), 'non-header cell width').toBe('');
+        }
+      });
+    });
+
+    it('should apply column.width when header is hidden', () => {
+      const driver = createDriver(<DataTable {...defaultProps} columns={columns} hideHeader/>);
+      columns.forEach((column, colIndex) => {
+        for (let rowIndex = 0; rowIndex < driver.getRowsCount(); rowIndex++) {
+          if (rowIndex === 0) {
+            expect(driver.getCellWidth(rowIndex, colIndex), `cell width (rowIndex===0)`).toEqual(column.width);
+          } else {
+            expect(driver.getCellWidth(rowIndex, colIndex), `cell width (rowIndex>0)`).toBe('');
+          }
+        }
+      });
+    });
   });
 
   it('should display correct amount of rows', () => {
@@ -133,13 +204,15 @@ describe('Table', () => {
       render: () => 'c',
       style: {
         padding: '1px',
-        height: '2px'
+        height: '2px',
+        width: '100px'
       }
     });
     const driver = createDriver(<DataTable {...clonedProps}/>);
     expect(driver.getCellStyle(0, 3)).toEqual(jasmine.objectContaining({
       padding: '1px',
-      height: '2px'
+      height: '2px',
+      width: '100px'
     }));
   });
 
@@ -250,15 +323,20 @@ describe('Table', () => {
   });
 
   describe('Sortable column titles', () => {
-    const props = {
-      ...defaultProps,
-      columns: [
-        {title: 'Row Num', render: (row, rowNum) => rowNum},
-        {title: 'A', sortable: true, sortDescending: false, render: row => row.a},
-        {title: 'B', render: row => row.b},
-        {title: 'C', sortable: true, sortDescending: true, render: row => row.a}
-      ]
-    };
+    let props;
+
+    beforeEach(() => {
+      props = {
+        ...defaultProps,
+        columns: [
+          {title: 'Row Num', render: (row, rowNum) => rowNum},
+          {title: 'A', sortable: true, sortDescending: false, render: row => row.a},
+          {title: 'B', render: row => row.b},
+          {title: 'C', sortable: true, sortDescending: true, render: row => row.a}
+        ]
+      };
+    });
+
     it('should display sortable title', () => {
       const _props = Object.assign({}, props, {onSortClick: jest.fn()});
       const driver = createDriver(<DataTable {..._props}/>);

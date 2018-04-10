@@ -52,6 +52,32 @@ describe('Page', () => {
     });
   });
 
+  describe('gradient size', () => {
+    it('should be 39px by default', () => {
+      const driver = createDriver(renderPageWithProps({gradientClassName: 'class'}));
+      expect(driver.gradientContainerHeight()).toBe('39px');
+    });
+
+    it('should not render 0 when maximized but header height delta is 0', () => {
+      const driver = createDriver(renderPageWithProps());
+      expect(driver.getPageHtml()).not.toContain('>0<');
+    });
+
+    it('should be zero when Tail exist and gradientCoverTail is false', () => {
+      const props = {gradientClassName: 'class', gradientCoverTail: false};
+      const driver = createDriver(<Page {...props}>
+        <Page.Header/>
+        <Page.Tail>
+          <Tail/>
+        </Page.Tail>
+        <Page.Content>
+          <Content/>
+        </Page.Content>
+      </Page>);
+      expect(driver.gradientContainerHeight()).toBe('0px');
+    });
+  });
+
   describe('Page.Tail', () => {
     it('should attach a tail component', () => {
       const driver = createDriver(

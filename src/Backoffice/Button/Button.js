@@ -4,8 +4,17 @@ import styles from './Button.scss';
 import WixComponent from '../../BaseComponents/WixComponent';
 import ButtonLayout from '../../ButtonLayout/ButtonLayout';
 import omit from 'omit';
+import {withFocusable, focusableStates} from '../../common/Focusable';
+
+const ICON_SIZES = {
+  'x-small': '8px',
+  small: '8px',
+  medium: '12px'
+};
 
 class Button extends WixComponent {
+  static displayName = 'Button';
+
   static propTypes = {
     ...ButtonLayout.propTypes,
     children: node,
@@ -20,16 +29,10 @@ class Button extends WixComponent {
 
   static defaultProps = ButtonLayout.defaultProps;
 
-  constructor(props) {
-    super(props);
-    this.addPrefix = this.addPrefix.bind(this);
-    this.addSuffix = this.addSuffix.bind(this);
-    this.addIcon = this.addIcon.bind(this);
-  }
-
-  addIcon(className, icon, height) {
-    const iconSize = height === 'small' ? '8px' : height === 'medium' ? '12px' : '16px';
+  addIcon = (className, icon, height) => {
+    const iconSize = ICON_SIZES[height] || '16px';
     const dataHook = className === styles.prefix ? 'btn-prefix' : 'btn-suffix';
+
     return (
       icon ?
         <div className={className} data-hook={dataHook}>
@@ -39,20 +42,36 @@ class Button extends WixComponent {
     );
   }
 
-  addPrefix() {
-    return this.addIcon(styles.prefix, this.props.prefixIcon, this.props.height);
-  }
+  addPrefix = () =>
+    this.addIcon(styles.prefix, this.props.prefixIcon, this.props.height);
 
-  addSuffix() {
-    return this.addIcon(styles.suffix, this.props.suffixIcon, this.props.height);
-  }
+  addSuffix = () =>
+    this.addIcon(styles.suffix, this.props.suffixIcon, this.props.height);
 
   render() {
-    const {disabled, onClick, children, type, onMouseEnter, onMouseLeave} = this.props;
+    const {
+      disabled,
+      onClick,
+      children,
+      type,
+      onMouseEnter,
+      onMouseLeave
+    } = this.props;
+
     const buttonLayoutProps = omit(['id', 'onClick', 'prefixIcon', 'suffixIcon', 'type'], this.props);
+
     return (
       <ButtonLayout {...buttonLayoutProps}>
-        <button onClick={onClick} disabled={disabled} type={type} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+        <button
+          onClick={onClick}
+          disabled={disabled}
+          type={type}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
+          onFocus={this.props.focusableOnFocus} // For some reason eslint react/prop-types rule doesn't work here ?!#$
+          onBlur={this.props.focusableOnBlur}
+          {...focusableStates(this.props)}
+          >
           {this.addPrefix()}
           {children}
           {this.addSuffix()}
@@ -62,6 +81,5 @@ class Button extends WixComponent {
   }
 }
 
-Button.displayName = 'Button';
+export default withFocusable(Button);
 
-export default Button;

@@ -16,11 +16,15 @@ import ExampleStatsWidgetWithPercentsRaw from '!raw-loader!./ExampleStatsWidgetW
 
 import ExampleStatsWidgetWithFilters from './ExampleStatsWidgetWithFilters';
 import ExampleStatsWidgetWithFiltersRaw from '!raw-loader!./ExampleStatsWidgetWithFilters';
+
+import ExampleStatsWidgetWithFilterWithNoBorder from './ExampleStatsWidgetWithFilterWithNoBorder';
+import ExampleStatsWidgetWithFilterWithNoBorderRaw from '!raw-loader!./ExampleStatsWidgetWithFilterWithNoBorder';
+
 import ReadmeTestkit from '../../src/StatsWidget/README.TESTKIT.md';
 
 
-storiesOf('Core', module)
-  .add('Stats Widget', () => (
+storiesOf('2. Layout', module)
+  .add('2.6 StatsWidget', () => (
     <TabbedView tabs={['Usage', 'Testkit']}>
       <div>
 
@@ -34,7 +38,10 @@ storiesOf('Core', module)
         <CodeExample title="Stats widget example with percents" code={ExampleStatsWidgetWithPercentsRaw}>
           <ExampleStatsWidgetWithPercents/>
         </CodeExample>
-        <CodeExample title="Stats widget example with filters" code={ExampleStatsWidgetWithFiltersRaw}>
+        <CodeExample title="Stats widget example with filter" code={ExampleStatsWidgetWithFilterWithNoBorderRaw}>
+          <ExampleStatsWidgetWithFilterWithNoBorder/>
+        </CodeExample>
+        <CodeExample title="Stats widget example with multiple filters" code={ExampleStatsWidgetWithFiltersRaw}>
           <ExampleStatsWidgetWithFilters/>
         </CodeExample>
       </div>

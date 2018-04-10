@@ -37,7 +37,10 @@ class DataTable extends WixComponent {
           return nextProps.data.length > index && nextProps.data[index] === elem;
         })) {
           isLoadingMore = true;
-          this.setState({lastPage: this.calcLastPage(nextProps)});
+          const lastPage = this.calcLastPage(nextProps);
+          const currentPage =
+            this.state.currentPage < lastPage ? this.state.currentPage + 1 : this.state.currentPage;
+          this.setState({lastPage, currentPage});
         }
       }
       if (!isLoadingMore) {
@@ -183,8 +186,12 @@ class DataTable extends WixComponent {
 
   renderCell = (rowData, column, rowNum, colNum) => {
     const classes = classNames({[s.important]: column.important});
+    const width = rowNum === 0 && this.props.hideHeader ? column.width : undefined;
+
     return (<td
-      style={column.style} className={classes}
+      style={column.style}
+      width={width}
+      className={classes}
       key={colNum}
       >
       {column.render && column.render(rowData, rowNum)}

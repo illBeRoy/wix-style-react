@@ -6,9 +6,9 @@ import {textLinkTestkitFactory} from '../../../testkit';
 import {textLinkTestkitFactory as enzymeTextLinkTestkitFactory} from '../../../testkit/enzyme';
 import {isTestkitExists, isEnzymeTestkitExists} from '../../../testkit/test-common';
 import {spy} from 'sinon';
+import {mount} from 'enzyme';
 
 describe('TextLink', () => {
-
   const createDriver = createDriverFactory(textLinkDriverFactory);
 
   it('should have a textLink', () => {
@@ -34,9 +34,30 @@ describe('TextLink', () => {
     expect(driver.getSize()).toBe('small');
   });
 
-  it('should be with dark background', () => {
+  //TODO - this should be deprecated
+  it('should support deprecated darkBackground', () => {
     const driver = createDriver(<TextLink link="" darkBackground size="small"/>);
     expect(driver.isDarkBackground()).toBeTruthy();
+  });
+
+  it('should be with dark background', () => {
+    const driver = createDriver(<TextLink link="" theme="darkBackground" size="small"/>);
+    expect(driver.isDarkBackground()).toBeTruthy();
+  });
+
+  it('should be with greyscale theme', () => {
+    const driver = createDriver(<TextLink link="" theme="greyScale" size="small"/>);
+    expect(driver.isGreyScale()).toBeTruthy();
+  });
+
+  it('should get greyscale theme', () => {
+    const driver = createDriver(<TextLink link="" theme="greyScale" size="small"/>);
+    expect(driver.getTheme()).toEqual('greyScale');
+  });
+
+  it('should get normal theme', () => {
+    const driver = createDriver(<TextLink link="" size="small"/>);
+    expect(driver.getTheme()).toEqual('normal');
   });
 
   it('should be with light background', () => {
@@ -98,6 +119,18 @@ describe('TextLink', () => {
 
     expect(onClickFunc.called).toEqual(false);
   });
+
+  describe('given `onClick` without `link`', () => {
+    it('should call `preventDefault`', () => {
+      const onClick = spy();
+      const preventDefault = spy();
+      const driver = createDriver(<TextLink onClick={onClick}/>);
+      driver.click({preventDefault});
+
+      expect(onClick.calledOnce).toBe(true);
+      expect(preventDefault.calledOnce).toBe(true);
+    });
+  });
 });
 
 describe('testkit', () => {
@@ -108,10 +141,10 @@ describe('testkit', () => {
 
 describe('enzyme testkit', () => {
   it('should exist', () => {
-    expect(isEnzymeTestkitExists(<TextLink link=""/>, enzymeTextLinkTestkitFactory)).toBe(true);
+    expect(isEnzymeTestkitExists(<TextLink link=""/>, enzymeTextLinkTestkitFactory, mount)).toBe(true);
   });
 
   it('should not exist', () => {
-    expect(isEnzymeTestkitExists(<TextLink link=""/>, enzymeTextLinkTestkitFactory, {withoutDataHook: true})).toBe(false);
+    expect(isEnzymeTestkitExists(<TextLink link=""/>, enzymeTextLinkTestkitFactory, mount, {withoutDataHook: true})).toBe(false);
   });
 });

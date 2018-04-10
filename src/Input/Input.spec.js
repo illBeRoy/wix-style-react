@@ -8,6 +8,7 @@ import {inputTestkitFactory, tooltipTestkitFactory} from '../../testkit';
 import {inputTestkitFactory as enzymeInputTestkitFactory} from '../../testkit/enzyme';
 import {isTestkitExists, isEnzymeTestkitExists} from '../../testkit/test-common';
 import {makeControlled} from '../../test/utils';
+import {mount} from 'enzyme';
 
 describe('Input', () => {
   const createDriver = createDriverFactory(inputDriverFactory);
@@ -102,8 +103,8 @@ describe('Input', () => {
 
   describe('autocomplete attribute', () => {
     it('should pass down to the wrapped input', () => {
-      const driver = createDriver(<Input autocomplete="off"/>);
-      expect(driver.getAutocomplete()).toBe('off');
+      const driver = createDriver(<Input autocomplete="email"/>);
+      expect(driver.getAutocomplete()).toBe('email');
     });
   });
 
@@ -122,15 +123,6 @@ describe('Input', () => {
 
       const driver = createDriver(<Input tabIndex={tabIndex}/>);
       expect(driver.getTabIndex()).toEqual(tabIndex);
-    });
-  });
-
-  describe('autocomplete attribute', () => {
-    it('should pass down to the wrapped input', () => {
-      const autocomplete = 'off';
-
-      const driver = createDriver(<Input autocomplete={autocomplete}/>);
-      expect(driver.getAutocomplete()).toEqual(autocomplete);
     });
   });
 
@@ -244,7 +236,6 @@ describe('Input', () => {
 
   describe('onChange attribute', () => {
     it('should be called when text is entered to the input', () => {
-
       const onChange = jest.fn();
       const event = {target: {value: 'world'}};
 
@@ -544,7 +535,6 @@ describe('Input', () => {
       const driver = createDriver(<Input size="large"/>);
       expect(driver.isOfSize('large')).toBeTruthy();
     });
-
   });
 
   describe('prefix attribute', () => {
@@ -613,9 +603,12 @@ describe('Input', () => {
       const driver = createDriver(<Input/>);
       expect(driver.getAriaDescribedby()).toBeNull;
     });
-
   });
 
+  it('should set `width`', () => {
+    const driver = createDriver(<Input width={120}/>);
+    expect(driver.getWidth()).toBe('120px');
+  });
 });
 
 describe('testkit', () => {
@@ -630,6 +623,6 @@ describe('enzyme testkit', () => {
   it('should exist', () => {
     const value = 'hello';
     const onChange = () => {};
-    expect(isEnzymeTestkitExists(<Input value={value} onChange={onChange}/>, enzymeInputTestkitFactory)).toBe(true);
+    expect(isEnzymeTestkitExists(<Input value={value} onChange={onChange}/>, enzymeInputTestkitFactory, mount)).toBe(true);
   });
 });

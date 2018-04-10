@@ -71,23 +71,6 @@ describe('Notification', () => {
     });
   });
 
-  describe('Sizes', () => {
-    it('should have a default size', () => {
-      const driver = createDriver(renderNotificationWithProps({show: true}));
-      expect(driver.isSmallSize()).toBeTruthy();
-    });
-
-    it('should support standard height', () => {
-      const driver = createDriver(renderNotificationWithProps({show: true, size: 'small'}));
-      expect(driver.isSmallSize()).toBeTruthy();
-    });
-
-    it('should support a big height', () => {
-      const driver = createDriver(renderNotificationWithProps({show: true, size: 'big'}));
-      expect(driver.isBigSize()).toBeTruthy();
-    });
-  });
-
   describe('Content', () => {
     describe('Label', () => {
       it('should show have a text to show', () => {

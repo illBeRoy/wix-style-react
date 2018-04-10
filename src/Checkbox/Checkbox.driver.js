@@ -1,21 +1,35 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ReactTestUtils from 'react-dom/test-utils';
-import $ from 'jquery';
 import {isClassExists} from '../../test/utils';
+import labelDriverFactory from '../Label/Label.driver';
+import {testkitFactoryCreator} from '../test-common';
 
-const checkboxDriverFactory = ({element, wrapper, component}) => {
+const labelTestkitFactory = testkitFactoryCreator(labelDriverFactory);
 
-  const checkbox = $(element).find('input')[0];
+const checkboxDriverFactory = ({element, wrapper, component, eventTrigger}) => {
+
+  const input = () => element.querySelector('input');
+  const checkbox = () => element.querySelector('.checkbox');
+  const labelDriver = () => labelTestkitFactory({wrapper: element, dataHook: 'checkbox-label'});
 
   return {
     exists: () => !!element,
-    click: () => ReactTestUtils.Simulate.change(checkbox),
+    click: () => eventTrigger.change(input()),
+    /** trigger focus on the element */
+    focus: () => eventTrigger.focus(checkbox()),
+    /** trigger blur on the element */
+    blur: () => eventTrigger.blur(checkbox()),
+    /**
+     * Focus related testing is done in e2e tests only.
+     * @deprecated
+     */
+    hasFocusState: () => element.getAttribute('data-focus'),
     isChecked: () => isClassExists(element, 'checked'),
     isDisabled: () => isClassExists(element, 'disabled'),
-    isIndeterminate: () => $(element).find('.indeterminate').length === 1,
+    isIndeterminate: () => isClassExists(element, 'indeterminate'),
     hasError: () => isClassExists(element, 'hasError'),
-    getLabel: () => element.textContent,
+    getLabel: () => labelDriver().getLabelText(),
+    getLabelDriver: () => labelDriver(),
     setProps: props => {
       const ClonedWithProps = React.cloneElement(component, Object.assign({}, component.props, props), ...(component.props.children || []));
       ReactDOM.render(<div ref={r => element = r}>{ClonedWithProps}</div>, wrapper);

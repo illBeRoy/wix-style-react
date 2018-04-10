@@ -14,35 +14,65 @@ class InputWithTags extends React.Component {
     this.blur = this.blur.bind(this);
     this.select = this.select.bind(this);
 
-    this.state = {inputValue: '', inputHasFocus: false};
+    this.state = {inputValue: '', inputHasFocus: false, hasHover: false};
   }
 
   componentDidMount() {
     this.props.autoFocus && this.props.onFocus();
   }
 
-  handleInputFocus() {
+  handleClick(e) {
     this.input.focus();
-    this.setState({inputHasFocus: true});
+    this.props.onInputClicked && this.props.onInputClicked(e);
   }
 
-  handleInputBlur() {
-    this.setState({inputHasFocus: false});
+  handleInputFocus(e) {
+    !this.state.inputHasFocus && this.setState({inputHasFocus: true}, () => {
+      this.props.onFocus && this.props.onFocus(e);
+    });
+  }
+
+  handleInputBlur(e) {
+    this.state.inputHasFocus && this.setState({inputHasFocus: false}, () => {
+      this.props.onBlur && this.props.onBlur(e);
+    });
+  }
+
+  handleHover() {
+    const {tags} = this.props;
+    if (!this.state.hasHover && tags.length === 0) {
+      this.setState({hasHover: true});
+    } else {
+      this.setState({hasHover: false});
+    }
   }
 
   render() {
     const {tags, onRemoveTag, placeholder, error, disabled, delimiters, ...inputProps} = this.props;
-    const hasFocus = this.state.inputHasFocus;
+    const {inputHasFocus: hasFocus, hasHover} = this.state;
 
     const className = classNames({
       [styles.tagsContainer]: true,
       [styles.disabled]: disabled,
       [styles.error]: error,
       [styles.hasFocus]: hasFocus,
+      [styles.hasHover]: hasHover,
       [styles.hasMaxHeight]: !isUndefined(this.props.maxHeight) || !isUndefined(this.props.maxNumRows)
     });
 
-    const desiredProps = omit(['onManuallyInput', 'inputElement', 'closeOnSelect', 'predicate', 'menuArrow', 'onClickOutside', 'fixedHeader', 'fixedFooter', 'dataHook'], inputProps);
+    const desiredProps = omit([
+      'onManuallyInput',
+      'inputElement',
+      'closeOnSelect',
+      'predicate',
+      'menuArrow',
+      'onClickOutside',
+      'fixedHeader',
+      'fixedFooter',
+      'dataHook',
+      'onFocus',
+      'onBlur',
+      'onInputClicked'], inputProps);
     const fontSize = (desiredProps.size && desiredProps.size === 'small') ? '14px' : '16px';
 
     let rowMultiplier;
@@ -57,7 +87,9 @@ class InputWithTags extends React.Component {
       <div
         className={className}
         style={{maxHeight}}
-        onClick={() => this.handleInputFocus()}
+        onClick={() => this.handleClick()}
+        onMouseOver={() => this.handleHover()}
+        onMouseOut={() => this.handleHover()}
         data-hook={this.props.dataHook}
         >
         {tags.map(({label, ...rest}) => <Tag key={rest.id} disabled={disabled} onRemove={onRemoveTag} {...rest}>{label}</Tag>)}
@@ -69,9 +101,11 @@ class InputWithTags extends React.Component {
           <Input
             width={this.props.width}
             ref={input => this.input = input}
+            onFocus={() => this.handleInputFocus()}
             onBlur={() => this.handleInputBlur()}
             placeholder={tags.length === 0 ? placeholder : ''}
             {...desiredProps}
+            dataHook="inputWithTags-input"
             disabled={disabled}
             onChange={e => {
               if (!delimiters.includes(e.target.value)) {
@@ -113,6 +147,8 @@ InputWithTags.propTypes = {
   dataHook: PropTypes.string,
   placeholder: PropTypes.string,
   onFocus: PropTypes.func,
+  onBlur: PropTypes.func,
+  onInputClicked: PropTypes.func,
   autoFocus: PropTypes.bool,
   disabled: PropTypes.bool,
   error: PropTypes.bool,

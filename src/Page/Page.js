@@ -6,43 +6,52 @@ import Content from './Content';
 import Tail from './Tail';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import {ResizeSensor} from 'css-element-queries';
 
-const SCROLL_TOP_THRESHOLD = 24;
+const SCROLL_TOP_THRESHOLD = 20;
 const SHORT_SCROLL_TOP_THRESHOLD = 3;
-
-const createStyleObject = (prop, value, predicate) => predicate() ? {[prop]: `${value}px`} : {};
 
 /**
  * A page container which contains a header and scrollable content
  */
 class Page extends WixComponent {
 
-  constructor(props) {
-    super(props);
+  static defaultProps = {
+    gradientCoverTail: true
+  }
+
+  constructor() {
+    super();
 
     this._setContainerScrollTopThreshold(false);
     this._handleScroll = this._handleScroll.bind(this);
+    this._handleResize = this._handleResize.bind(this);
 
     this.state = {
       headerHeight: 0,
       tailHeight: 0,
+      scrollBarWidth: 0,
       minimized: false
     };
   }
 
   componentDidMount() {
     super.componentDidMount();
-    this._getScrollContainer().addEventListener('scroll', this._handleScroll);
+    this.contentResizeListener = new ResizeSensor(this._getScrollContainer().childNodes[0], this._handleResize);
     this._calculateComponentsHeights();
+    this._handleResize();
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    // Do not trigger height calculation if the component re-rendered from minimize change
-    if (prevState.minimized || this.state.minimized) {
-      return;
+  componentDidUpdate() {
+    // Do not trigger height calculation if the component is minimized
+    if (!this.state.minimized) {
+      this._calculateComponentsHeights();
     }
+  }
 
-    this._calculateComponentsHeights();
+  componentWillUnmount() {
+    super.componentWillUnmount();
+    this.contentResizeListener.detach(this._handleResize);
   }
 
   _calculateComponentsHeights() {
@@ -56,12 +65,6 @@ class Page extends WixComponent {
         tailHeight: newTailHeight
       });
     }
-  }
-
-  componentWillUnmount() {
-    super.componentWillUnmount();
-
-    this._getScrollContainer().removeEventListener('scroll', this._handleScroll);
   }
 
   _setContainerScrollTopThreshold(shortThreshold) {
@@ -89,6 +92,16 @@ class Page extends WixComponent {
     }
   }
 
+  _handleResize() {
+    // Fixes width issues when scroll bar is present in windows
+    const scrollContainer = this._getScrollContainer();
+    const scrollBarWidth = scrollContainer && scrollContainer.offsetWidth - scrollContainer.clientWidth;
+
+    if (this.state.scrollBarWidth !== scrollBarWidth) {
+      this.setState({scrollBarWidth});
+    }
+  }
+
   _safeGetChildren(element) {
     if (!element || !element.props || !element.props.children) {
       return [];
@@ -97,35 +110,66 @@ class Page extends WixComponent {
     return element.props.children;
   }
 
+  _calculatePageDimensionsStyle() {
+    const {maxWidth, sidePadding} = this.props;
+    if (!maxWidth && !sidePadding && sidePadding !== 0) {
+      return null;
+    }
+
+    const styles = {};
+    if (maxWidth) {
+      styles.maxWidth = `${maxWidth}px`;
+    }
+
+    if (sidePadding || sidePadding === 0) {
+      styles.paddingLeft = `${sidePadding}px`;
+      styles.paddingRight = `${sidePadding}px`;
+    }
+
+    return styles;
+  }
+
+  _pageHeaderContainerStyle() {
+    const {scrollBarWidth} = this.state;
+    if (scrollBarWidth) {
+      return {width: `calc(100% - ${scrollBarWidth}px`};
+    }
+    return null;
+  }
+
   render() {
-    const {backgroundImageUrl, maxWidth, gradientClassName, children} = this.props;
+    const {backgroundImageUrl, gradientClassName, children, gradientCoverTail} = this.props;
     const {headerHeight, tailHeight, minimized} = this.state;
     const hasBackgroundImage = !!backgroundImageUrl;
-    const hasGradientClassName = !!gradientClassName;
+    const hasGradientClassName = !!gradientClassName && !backgroundImageUrl;
     const {
       PageHeader,
       PageContent,
       PageTail
     } = getChildrenObject(children);
 
-    const pageHeaderStyle = createStyleObject('paddingBottom', SCROLL_TOP_THRESHOLD, () => !minimized);
-    const maxWidthStyle = createStyleObject('maxWidth', maxWidth, () => !!maxWidth);
     this._setContainerScrollTopThreshold(PageTail && hasGradientClassName);
+    const contentFullScreen = PageContent && PageContent.props.fullScreen;
+    const pageDimensionsStyle = this._calculatePageDimensionsStyle();
+
+    const imageHeight = `${headerHeight + (PageTail ? -tailHeight : 39)}px`;
+    const gradientHeight = gradientCoverTail ? `${headerHeight + (PageTail ? -SCROLL_TOP_THRESHOLD : 39)}px` : imageHeight;
+    const calculatedHeaderHeight = !minimized ? headerHeight : PageTail ? headerHeight - 78 : headerHeight - 54;
+    const headerHeightDelta = headerHeight - calculatedHeaderHeight;
 
     return (
       <div className={s.page}>
         <div
+          style={this._pageHeaderContainerStyle()}
           className={classNames(s.pageHeaderContainer, {
             [s.minimized]: minimized,
-            [s.withBackgroundColor]: minimized || (!hasBackgroundImage && !hasGradientClassName),
             [s.withoutBottomPadding]: PageTail && minimized
           })}
           ref={r => this.pageHeaderRef = r}
-          style={pageHeaderStyle}
           >
           {
             PageHeader &&
-              <div className={s.pageHeader} style={maxWidthStyle}>
+              <div className={s.pageHeader} style={pageDimensionsStyle}>
                 {React.cloneElement(
                   PageHeader, {
                     minimized,
@@ -138,29 +182,32 @@ class Page extends WixComponent {
               <div
                 data-hook="page-tail"
                 className={classNames(s.tail, {[s.minimized]: minimized})}
-                style={maxWidthStyle}
+                style={pageDimensionsStyle}
                 ref={r => this.pageHeaderTailRef = r}
                 >
-                {PageTail}
+                {React.cloneElement(PageTail, {minimized})}
               </div>
           }
         </div>
         <div
-          className={s.scrollableContent} ref={r => this.scrollableContentRef = r}
+          className={s.scrollableContent}
+          onScroll={this._handleScroll}
           data-hook="page-scrollable-content"
+          data-class="page-scrollable-content"
+          style={{paddingTop: `${calculatedHeaderHeight}px`}}
+          ref={r => this.scrollableContentRef = r}
           >
-          <div className={s.contentPlaceholder} style={{height: `${headerHeight}px`}}/>
           {
             hasBackgroundImage &&
               <div
-                className={s.imageBackground}
-                style={{
-                  height: `${headerHeight + (PageTail ? -tailHeight : 39)}px`,
-                  backgroundImage: `url(${backgroundImageUrl})`
-                }}
+                className={s.imageBackgroundContainer}
+                style={{height: imageHeight}}
                 data-hook="page-background-image"
                 >
-                <div className={s.imageBackgroundOverlay}/>
+                <div
+                  className={s.imageBackground}
+                  style={{backgroundImage: `url(${backgroundImageUrl})`}}
+                  />
               </div>
           }
           {
@@ -168,11 +215,14 @@ class Page extends WixComponent {
               <div
                 data-hook="page-gradient-class-name"
                 className={`${s.gradientBackground} ${gradientClassName}`}
-                style={{height: `${headerHeight + (PageTail ? -SCROLL_TOP_THRESHOLD : 39)}px`}}
+                style={{height: gradientHeight}}
                 />
           }
-          <div className={s.content} style={maxWidthStyle}>
-            {this._safeGetChildren(PageContent)}
+          <div className={s.contentContainer}>
+            <div className={classNames(s.content, {[s.contentFullScreen]: contentFullScreen})} style={contentFullScreen ? null : pageDimensionsStyle}>
+              {this._safeGetChildren(PageContent)}
+            </div>
+            {headerHeightDelta ? <div style={{height: `${headerHeightDelta}px`}}/> : null}
           </div>
         </div>
       </div>
@@ -186,12 +236,16 @@ Page.Content = Content;
 Page.Tail = Tail;
 
 Page.propTypes = {
-  /** Background Url */
+  /** Background image url of the header beackground */
   backgroundImageUrl: PropTypes.string,
-  /** Max width of the content */
+  /** Sets the max width of the header and the content */
   maxWidth: PropTypes.number,
+  /** Sets padding of the sides of the page */
+  sidePadding: PropTypes.number,
   /** Header background color class name, allows to add a gradient to the header */
   gradientClassName: PropTypes.string,
+  /** If false Gradient will not cover Page.Tail */
+  gradientCoverTail: PropTypes.bool,
   children: PropTypes.arrayOf((children, key) => {
     const childrenObj = getChildrenObject(children);
 

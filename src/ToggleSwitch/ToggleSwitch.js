@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
 import WixComponent from '../BaseComponents/WixComponent';
-
+import {withFocusable, focusableStates} from '../common/Focusable';
 import styles from './ToggleSwitch.scss';
 
 /**
@@ -51,9 +51,14 @@ class ToggleSwitch extends WixComponent {
     })();
 
     return (
-      <div className={rootClassName}>
+      <div
+        className={rootClassName}
+        onFocus={this.props.focusableOnFocus} // For some reason eslint react/prop-types rule doesn't work here ?!#$
+        onBlur={this.props.focusableOnBlur}
+        {...focusableStates(this.props)}
+        >
         <input type="checkbox" id={id} checked={checked} onChange={e => !disabled && onChange(e)} disabled={disabled}/>
-        <label htmlFor={id} className={outerLabel} style={{background: fillColor}} >
+        <label htmlFor={id} className={outerLabel} style={{background: fillColor}} tabIndex={disabled ? null : 0} >
           <label htmlFor={id} className={innerLabel}>
             <svg className={toggleActive} viewBox="0 0 41 32">
               <path style={{fill: fillColor}} d="M0.169 17.815c0.169 1.098 0.76 2.111 1.689 2.871l14.269 10.385c1.942 1.435 4.644 1.013 6.079-0.844l18.069-23.303c1.435-1.858 1.098-4.559-0.844-5.995s-4.644-1.098-6.164 0.844l-15.367 19.842-10.723-7.852c-1.942-1.435-4.644-1.013-6.164 0.844-0.76 0.929-1.013 2.111-0.844 3.208z"/>
@@ -95,4 +100,4 @@ ToggleSwitch.defaultProps = {
   size: 'large'
 };
 
-export default ToggleSwitch;
+export default withFocusable(ToggleSwitch);

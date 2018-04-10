@@ -10,7 +10,6 @@ import TextLabel from './TextLabel';
 import ActionButton from './ActionButton';
 import css from './Notification.scss';
 
-
 export const LOCAL_NOTIFICATION = 'local';
 export const GLOBAL_NOTIFICATION = 'global';
 export const STICKY_NOTIFICATION = 'sticky';
@@ -120,8 +119,7 @@ class Notification extends WixComponent {
   }
 
   renderNotification() {
-    const {zIndex, children, type, theme, size} = this.props;
-
+    const {zIndex, children, type, theme} = this.props;
     const childrenComponents = mapChildren(children);
 
     return (
@@ -140,7 +138,6 @@ class Notification extends WixComponent {
           className={classNames(
             css.notification,
             css[`${theme}Theme`],
-            css[`${size}Size`],
             css[`${notificationTypeToPosition[type]}Position`]
           )}
           >
@@ -181,7 +178,6 @@ class Notification extends WixComponent {
 Notification.propTypes = {
   show: PropTypes.bool,
   theme: PropTypes.oneOf(['standard', 'error', 'success', 'warning', 'premium']),
-  size: PropTypes.oneOf(['small', 'big']),
   type: PropTypes.oneOf([GLOBAL_NOTIFICATION, LOCAL_NOTIFICATION, STICKY_NOTIFICATION]),
   timeout: PropTypes.number,
   zIndex: PropTypes.number,
@@ -191,7 +187,6 @@ Notification.propTypes = {
 
 Notification.defaultProps = {
   theme: 'standard',
-  size: 'small',
   type: GLOBAL_NOTIFICATION,
   onClose: null
 };

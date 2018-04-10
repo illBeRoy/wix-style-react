@@ -80,6 +80,7 @@ class Input extends Component {
       if (!disabled) {
         this.input.focus();
         this._onFocus();
+        this.props.onInputClicked();
       }
     };
 
@@ -168,9 +169,9 @@ class Input extends Component {
     this.input && this.input.select();
   };
 
-  _onFocus = () => {
+  _onFocus = e => {
     this.setState({focus: true});
-    this.props.onFocus && this.props.onFocus();
+    this.props.onFocus && this.props.onFocus(e);
 
     if (this.props.autoSelect) {
       // Set timeout is needed here since onFocus is called before react
@@ -257,8 +258,8 @@ Input.propTypes = {
   /** Standard React Input autoSelect (select the entire text of the element on focus) */
   autoSelect: PropTypes.bool,
 
-  /** Turns on or off autocomplete property, which is responsible for default browser autocomplete suggestion */
-  autocomplete: PropTypes.oneOf(['off', 'on']),
+  /** Sets value of autocomplete attribute (consult the [HTML spec](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#attr-fe-autocomplete) for possible values  */
+  autocomplete: PropTypes.string,
 
   /** Specifies a data-hook for tests */
   dataHook: PropTypes.string,
@@ -333,7 +334,7 @@ Input.propTypes = {
   /** called when user pastes text from clipboard (using mouse or keyboard shortcut) */
   onPaste: PropTypes.func,
 
-  /** onShow prop for the error and help tooltips (supported only for amaterial them for now */
+  /** onShow prop for the error and help tooltips (supported only for amaterial theme for now) */
   onTooltipShow: PropTypes.func,
 
   /** Placeholder to display */
@@ -364,17 +365,19 @@ Input.propTypes = {
   textOverflow: PropTypes.string,
 
   /** The theme of the input */
-  theme: PropTypes.oneOf(['normal', 'paneltitle', 'material', 'amaterial', 'flat', 'flatdark']),
+  theme: PropTypes.oneOf(['normal', 'tags', 'paneltitle', 'material', 'amaterial', 'flat', 'flatdark']),
+
+  /** The material design style floating label for input (supported only for amaterial theme for now) */
   title: PropTypes.string,
 
-  /** Placement of the error and help tooltips (supported only for amaterial them for now) */
+  /** Placement of the error and help tooltips (supported only for amaterial theme for now) */
   tooltipPlacement: PropTypes.string,
   type: PropTypes.string,
   unit: PropTypes.string,
 
   /** Inputs value */
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  width: PropTypes.string,
+  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   withSelection: PropTypes.bool,
   required: PropTypes.bool
 };

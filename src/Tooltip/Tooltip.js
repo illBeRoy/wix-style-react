@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import TooltipContent from './TooltipContent';
 import position from './TooltipPosition';
 import styles from './TooltipContent.scss';
+import {TooltipContainerStrategy} from './TooltipContainerStrategy';
 
 const renderSubtreeIntoContainer = ReactDOM.unstable_renderSubtreeIntoContainer;
 
@@ -29,10 +30,10 @@ class Tooltip extends WixComponent {
     disabled: PropTypes.bool,
 
     /** The tooltip max width  */
-    maxWidth: PropTypes.string,
+    maxWidth: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 
     /** The tooltip min width  */
-    minWidth: PropTypes.string,
+    minWidth: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 
     /** Callback when cliking outside  */
     onClickOutside: PropTypes.func,
@@ -124,6 +125,8 @@ class Tooltip extends WixComponent {
       visible: false,
       hidden: true
     };
+
+    this._tooltipContainerStrategy = new TooltipContainerStrategy(props.appendTo, props.appendToParent);
   }
 
   componentElements() {
@@ -197,15 +200,16 @@ class Tooltip extends WixComponent {
 
   componentWillReceiveProps(nextProps) {
     super.componentWillReceiveProps && super.componentWillReceiveProps(nextProps);
-    if (nextProps.active !== this.props.active) {
+    if (nextProps.active !== this.props.active ||
+        nextProps.disabled !== this.props.disabled) {
       if (this.state.visible && this.props.hideTrigger === 'custom') {
-        if (!nextProps.active) {
-          this.hide();
+        if (!nextProps.active || nextProps.disabled) {
+          this.hide(nextProps);
         }
       }
       if (!this.state.visible && this.props.showTrigger === 'custom') {
-        if (nextProps.active) {
-          this.show();
+        if (nextProps.active && !nextProps.disabled) {
+          this.show(nextProps);
         }
       }
     }
@@ -239,17 +243,11 @@ class Tooltip extends WixComponent {
   };
 
   _getContainer() {
-    if (typeof document === 'undefined') {
-      return null;
-    }
-    if (this.props.appendTo) {
-      return this.props.appendTo;
-    }
-    return this.props.appendToParent ? this._childNode.parentElement : document ? document.body : null;
+    return this._tooltipContainerStrategy.getContainer(this._childNode);
   }
 
-  show() {
-    if (this.props.disabled) {
+  show = (props = this.props) => {
+    if (props.disabled) {
       return;
     }
     if (this._unmounted) {
@@ -268,8 +266,8 @@ class Tooltip extends WixComponent {
         if (typeof document === 'undefined') {
           return;
         }
-        if (this.props.onShow) {
-          this.props.onShow();
+        if (props.onShow) {
+          props.onShow();
         }
 
         this.setState({visible: true}, () => {
@@ -287,13 +285,13 @@ class Tooltip extends WixComponent {
             fw = this._getRect(tooltipNode).width;
             this._updatePosition(this.tooltipContent);
             sw = this._getRect(tooltipNode).width;
-          } while (!this.props.appendToParent && fw !== sw);
+          } while (!props.appendToParent && fw !== sw);
         });
-      }, this.props.showDelay);
+      }, props.showDelay);
     }
-  }
+  };
 
-  hide() {
+  hide = (props = this.props) => {
     this.setState({hidden: true});
 
     if (this._showTimeout) {
@@ -309,7 +307,7 @@ class Tooltip extends WixComponent {
       const hideLazy = () => {
         if (this._mountNode) {
           ReactDOM.unmountComponentAtNode(this._mountNode);
-          this.props.onHide && this.props.onHide();
+          props.onHide && props.onHide();
           this._getContainer() && this._getContainer().removeChild(this._mountNode);
           this._mountNode = null;
         }
@@ -323,9 +321,9 @@ class Tooltip extends WixComponent {
         return hideLazy();
       }
 
-      this._hideTimeout = setTimeout(hideLazy, this.props.hideDelay);
+      this._hideTimeout = setTimeout(hideLazy, props.hideDelay);
     }
-  }
+  };
 
   _hideOrShow(event) {
     if (this.props.hideTrigger === event && !this.state.hidden) {
@@ -420,12 +418,14 @@ class Tooltip extends WixComponent {
         height: el.offsetHeight
       };
     }
-    if (this.props.appendTo) {
-      const containerRect = this.props.appendTo.getBoundingClientRect();
+
+    const container = this._getContainer(el);
+    if (container !== document.body) {
+      const containerRect = container.getBoundingClientRect();
       const selfRect = el.getBoundingClientRect();
       return {
-        left: selfRect.left - containerRect.left + this.props.appendTo.scrollLeft,
-        top: selfRect.top - containerRect.top + this.props.appendTo.scrollTop,
+        left: selfRect.left - containerRect.left + container.scrollLeft,
+        top: selfRect.top - containerRect.top + container.scrollTop,
         width: selfRect.width,
         height: selfRect.height
       };

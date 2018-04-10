@@ -2,7 +2,7 @@ import eyes from 'eyes.it';
 import {autoCompleteTestkitFactory, getStoryUrl, waitForVisibilityOf} from '../../testkit/protractor';
 
 describe('AutoComplete', () => {
-  const storyUrl = getStoryUrl('Core', 'AutoComplete');
+  const storyUrl = getStoryUrl('4. Selection', '4.1 + AutoComplete');
   const dataHook = 'story-autocomplete';
 
   eyes.it('should open autocomplete when it focused', () => {
@@ -15,7 +15,7 @@ describe('AutoComplete', () => {
       expect(driver.getDropdown().isDisplayed()).toBe(false);
 
       driver.click();
-      browser.sleep(500);
+      browser.sleep(500);// eslint-disable-line no-restricted-properties
 
       expect(driver.getDropdown().isDisplayed()).toBe(true);
       expect(driver.getDropdownItemsCount()).toEqual(5);

@@ -12,6 +12,327 @@ Types of changes:
 1. **Security** in case of vulnerabilities.
 1. **Breaking** for breaking changes
 
+## 3.1.3 - TBD
+### Fixed
+- `<Tooltip>` - Fixed `Tooltip` positioning within `Page` component [#1649](https://github.com/wix/wix-style-react/pull/1649)
+- `<DatePicker/>` - `onChange` called with time part untouched [#1631](https://github.com/wix/wix-style-react/pull/1631)
+
+## 3.1.2 - 2018-04-08
+### Fixed
+- `<FieldWithSelection>` - Fix missing styling when with Checkbox [#1642](https://github.com/wix/wix-style-react/pull/1642)
+
+## 3.1.1 - 2018-04-08
+### Fixed
+- Reverted the removal of `Languages` icon
+
+## 3.1.0 - 2018-04-08
+### Added
+- `<Heading>` component [#1617](https://github.com/wix/wix-style-react/pull/1617)
+- `<Button>` - Make it focusable by keyboard only - using new FocusableHOC [#1614](https://github.com/wix/wix-style-react/pull/1614)
+- Make keyboard-only focusable for: `<Checkbox> <RadioButton> <RichTextAreaButton> <ToggleSwitch>` [#1624](https://github.com/wix/wix-style-react/pull/1624)
+
+### Changed
+- `<Badge>` & `<CounterBadge>` - improve Badge & CounterBadge stories [#1610](https://github.com/wix/wix-style-react/pull/1610)
+- Icons - Migrated some of the internal icons to wix-ui-icons-common [#1616](https://github.com/wix/wix-style-react/pull/1616)
+- Icons - Migrate arrow icons to wix-ui-icons-common [#1621](https://github.com/wix/wix-style-react/pull/1621)
+- Migrate to yoshi [962c7eb](https://github.com/wix/wix-style-react/commit/962c7ebae41102297ebe2a96eb5360b205ab8e6c)
+
+### Fixed
+- Typography - fix `h2` lineheight and use correct grey colors in `t1` and `t3` [e38cd6a](https://github.com/wix/wix-style-react/commit/e38cd6a8ddee4d67a09dcca106a35b830f3735dc)
+- `<DatePicker>` - big date, year dropdown min/max values are no longer hardcoded  [#1629](https://github.com/wix/wix-style-react/pull/1629)
+- `<MessageBox>` - right margin only if more then one button [#1588](https://github.com/wix/wix-style-react/pull/1588)
+- `<DataTable>` - add fallback to text-align:start for IE[#1623](https://github.com/wix/wix-style-react/pull/1623)
+- `<DataTable>` - render newly received data on infinite scroll properly [#1618](https://github.com/wix/wix-style-react/pull/1618)
+- `<DrillView>` - Fix render new state while in transition casues menu to disappear [#1615](https://github.com/wix/wix-style-react/pull/1615)
+- `<ButtonWithOptions>`,`<DropdownLayout>` - don't invoke onSelect when same option is selected [#1579](https://github.com/wix/wix-style-react/pull/1579)
+
+## 3.0.1 - 2018-03-28
+### Fixed
+- `<DrillView/>` - dont go over a tags if have no onClick prop [#1599](https://github.com/wix/wix-style-react/pull/1599)
+
+- `<Range/>` - fix click race condition
+
+
+## 3.0.0
+### Breaking
+- `<DatePicker/>` [migration guide](https://github.com/wix/wix-style-react/blob/master/src/DatePicker/MIGRATION.md)
+- `<Badge/>` [migration guide](https://github.com/wix/wix-style-react/blob/master/src/Badge/MIGRATION.md)
+- `<CounterBadge/>` [migration guide](https://github.com/wix/wix-style-react/blob/master/src/CounterBadge/MIGRATION.md)
+- jQuery no longer used in testkits, may possibly break your tests
+- `<Text/>` - no more unexpected `margins` when using any of the following `appearance`s: `H0`, `H1`, `H1.1`, `H2`, `H2.1`, `H3`, `H4`. May break layout.
+
+## 2.0.34 - 2018-03-26
+### Fixed
+- `<Tooltip/>` - fixed Tooltip show and hide functions to accept the relevant props [#1597](https://github.com/wix/wix-style-react/pull/1597)
+
+## 2.0.33 - 2018-03-26
+### Fixed
+- `<Range/>` - fix e2e eyes failures by making the date fixed [#1589](https://github.com/wix/wix-style-react/pull/1589)
+- `<Page/>` - fix an issue that renders `0` in a certain case
+- `<Tooltip/>` - fix disabled change when active true [#1584](https://github.com/wix/wix-style-react/pull/1584)
+- `<TextLink/>` - remove link prop required field [#1583](https://github.com/wix/wix-style-react/pull/1583)
+- `<DrillView/>` - don't trigger `onClick` for disabled items [#1591](https://github.com/wix/wix-style-react/pull/1591)
+
+### Added
+- Testing - add `scrollToElement` function for protractor testing [#1569](https://github.com/wix/wix-style-react/pull/1569)
+
+## 2.0.32 - 2018-03-22
+### Changed
+- `<toggleSwitch>` - add hover style [#1576](https://github.com/wix/wix-style-react/pull/1576)
+- Focus-Styles: Disable focus style for component which need keyboardOnly [#1578](https://github.com/wix/wix-style-react/pull/1578)
+- `<RichTextEditor/>` - add new focus styles to buttons [#1572](https://github.com/wix/wix-style-react/pull/1572)
+- `Grid` - grid rows bottom margin should be 30px [#1483](https://github.com/wix/wix-style-react/pull/1483)
+
+### Fixed
+- `<Page/>` - fixed issue when page jumps between minimized and full states on page without scroll [#1467](https://github.com/wix/wix-style-react/issues/1467)
+- `<Tooltip/>` - fix Tooltip active and disabled new props transition [#1573](https://github.com/wix/wix-style-react/pull/1573)
+- `<Checkbox>` protractor driver: use isFocused from test-common
+
+## 2.0.31 - 2018-03-19
+### Added
+- `<PopoverMenu>` : add appendTo props [#1568](https://github.com/wix/wix-style-react/pull/1568)
+- TextLink - add grayscale. MultiSelect Tags - hover css [#1452](https://github.com/wix/wix-style-react/pull/1452)
+- Apply `<Input>` new focus style [#1533](https://github.com/wix/wix-style-react/pull/1533)
+- Added event listener for page content resize [#1564](https://github.com/wix/wix-style-react/pull/1564)
+### Changed
+- Testkit sectionhelper [#1563](https://github.com/wix/wix-style-react/pull/1563)
+- Fix missing dataHook - add Range e2e test for DatePicker [#1562](https://github.com/wix/wix-style-react/pull/1562)
+- `<FieldWithSelection>` : Prepare for new focus styles [#1559](https://github.com/wix/wix-style-react/pull/1559)
+### Fixed
+- fix(Selector, Checkbox, ModalSelectorLayout)| ModalSelectorLayout clicking on checkbox fires onToggle twice [#1560](https://github.com/wix/wix-style-react/pull/1560)
+- Remove scss calls to fade() [#1554](https://github.com/wix/wix-style-react/pull/1554)
+
+## 2.0.30 - 2018-03-15
+### Added
+- `<MultiSelect/>` composite component [1538](https://github.com/wix/wix-style-react/pull/1538)
+
+### Changed
+- `<ModalSelectorLayout/>` support disabled items [1550](https://github.com/wix/wix-style-react/pull/1550)
+- `<InputArea/>`, `<RichTextArea/>`, `<Range>`, `<RadioGroup>` new focus styles [1553](https://github.com/wix/wix-style-react/pull/1553) [1542](https://github.com/wix/wix-style-react/pull/1542) [1548](https://github.com/wix/wix-style-react/pull/1548)
+- `<TextLink/>` - `preventDefault` for onClick when no `link` given [1551](https://github.com/wix/wix-style-react/pull/1551)
+
+### Fixed
+- `<Tooltip/>` fix `tooltipPlacement` prop [1552](https://github.com/wix/wix-style-react/pull/1552)
+- `<ToggleSwitch/>` - Remove from async from isFocused [1544](https://github.com/wix/wix-style-react/pull/1544)
+- `<PageHeader/>` - update the title methods in the driver to return the [1549](https://github.com/wix/wix-style-react/pull/1549)
+
+## 2.0.29 - 2018-03-12
+### Added
+- new icons `Duplicate3`, `EmailOpen`, `Trash4`, `Warning` [1504](https://github.com/wix/wix-style-react/pull/1504)
+
+### Changed
+- `<Checkbox/>` focus styles [1521](https://github.com/wix/wix-style-react/pull/1521)
+- `<ToggleSwitch/>` new focus styles + protractor isFocused util [1522](https://github.com/wix/wix-style-react/pull/1522)
+- `<Tags/>` new focus styles + disable <Input> focus style + bug fixes [1513](https://github.com/wix/wix-style-react/pull/1513)
+
+### Fixed
+- `<Page/>` Added more height to content on minimize [1535](https://github.com/wix/wix-style-react/pull/1535)
+- `<Button theme="no-border"/>` fix hover prop [1525](https://github.com/wix/wix-style-react/pull/1525)
+- `<Notification/>` include padding as part of width [1529](https://github.com/wix/wix-style-react/pull/1529)
+
+## 2.0.28 - 2018-03-06
+### Fixed
+- `<RadioGroup/>` - fix testkit `getSelectedValue` to return the updated selected option [1515](https://github.com/wix/wix-style-react/pull/1515)
+
+## 2.0.27 - 2018-03-05
+### Fixed
+- `<Input/>` - revert changed focus style [1509](https://github.com/wix/wix-style-react/pull/1509)
+
+## 2.0.26 - 2018-03-02
+### Added
+- `<Button/>` Implemented Tiny button [1491](https://github.com/wix/wix-style-react/pull/1491)
+
+### Fixed
+- `<Dropdown/>` - do not show options menu on focus [1500](https://github.com/wix/wix-style-react/pull/1500)
+- `<DataTable/>` - Fix column width not set when header is hidden [1477](https://github.com/wix/wix-style-react/pull/1477)
+- `<Page/>` fixed explorer bug again [1482](https://github.com/wix/wix-style-react/pull/1482)
+
+### Changed
+- `<Input/>` - Change Focus style [1496](https://github.com/wix/wix-style-react/pull/1496)
+- `<PopoverMenu/>` - change show delay to 0 [1489](https://github.com/wix/wix-style-react/pull/1489)
+- `<Tag/>` extend component functionality [1481](https://github.com/wix/wix-style-react/pull/1481)
+
+## 2.0.25 - 2018-02-22
+### Changed
+- `<Page/>` - Reverted a bug fix for IE [#1468](https://github.com/wix/wix-style-react/pull/1468) that caused google chrome issue.
+- Removed the `componentInstance` occurrences in tests.
+
+### **Added** for new features.
+- `<Icon/>` - new email icon
+
+## 2.0.24 - 2018-02-19
+### Changed
+- `<Page.Header/>` - update gradient height [#1458](https://github.com/wix/wix-style-react/pull/1458)
+
+### Fixed
+- `<Page/>` fixed bug in IE [#1468](https://github.com/wix/wix-style-react/pull/1468)
+- `<Card/>` header title position fix [#1464](https://github.com/wix/wix-style-react/pull/1464)
+- `<Selector/>` & `<ModalSelectorLayout/>` cover long text with ellipsis [#1461](https://github.com/wix/wix-style-react/pull/1461)
+
+## 2.0.23 - 2018-02-14
+### Fixed
+- `<RadioGroup/>` - Fix radio button width (#1457)
+- `<Input/>` - Amaterial theme fix, added hover and fade in / out [#1445](https://github.com/wix/wix-style-react/pull/1445)
+- `<InputArea/>` - on error tooltip use `theme="dark"` & default `tooltipPlacement="top"` [1456](https://github.com/wix/wix-style-react/pull/1456)
+- `<StatsWidget/>` - fix padding issues [#1446](https://github.com/wix/wix-style-react/pull/1446)
+- `<GoogleAddressInput/>` fix ocasionally missing street number [#1435](https://github.com/wix/wix-style-react/pull/1435)
+
+### Changed
+- `<Notification/>` - remove size prop [#1448](https://github.com/wix/wix-style-react/pull/1448)
+- `<PopoverMenuItem/>` - add size prop [#1437](https://github.com/wix/wix-style-react/pull/1437)
+
+## 2.0.22 - 2018-02-11
+### Fixed
+- fix `puppeteer` testkit driver for the `<Label/>` component.
+
+## 2.0.21 - 2018-02-11
+### Fixed
+- `<Page/>` - Fixed width issues with windows browser.
+
+### Added
+- `puppeteer` testkit driver for the `<Label/>` component and added docs.
+- Added disalbed state for a `<SideMenu/>` Drillview.
+
+## 2.0.20 - 2018-02-07
+### Added
+- `puppeteer` testkit driver for the `Button` component.
+
+### Changed
+- Reference to wix-ui-test-utils
+
+## 2.0.19 - 2018-02-06
+### Changed
+- `puppeteer` testkit driver for the `Input` component.
+
+### Fixed
+- Don't render `PopoverMenuItem` icon if doesn't exist
+- `Breadcrumbs` dark theme color correction.
+- `Page` UI fixes for restricted content size.
+- `Page` pass the `minimized` property to the content element
+
+
+## 2.0.18 - 2018-02-02
+### Fixed
+- Bug fixes in `Page` Component [1422](https://github.com/wix/wix-style-react/pull/1422) [1407](https://github.com/wix/wix-style-react/pull/1407)
+- `DropdownLayout` - Hides the drop down when not shown [1408](https://github.com/wix/wix-style-react/pull/1408)
+- fix divider color `Card.Header`
+
+### Added
+- Automatic Storybook Deployment Upon PR [1418](https://github.com/wix/wix-style-react/pull/1418)
+
+## 2.0.17 - 2018-01-30
+### Changed
+- Changed order of storybook components [1390](https://github.com/wix/wix-style-react/pull/1390)
+
+### Added
+- `<CounterBadge/>` new component from `wix-ui-backoffice` [1392](https://github.com/wix/wix-style-react/pull/1392)
+
+### Fixed
+- `<Breadcrumbs/>` add 204px `max-width` on breadcrumb items [1394](https://github.com/wix/wix-style-react/pull/1394)
+- `<RadioGroup.Radio/>` use correct `displayName` for `RadioGroup.Radio` [00f303b](https://github.com/wix/wix-style-react/commit/00f303b210bb0dda808f9ab85405c17ea3cf8d03)
+- `RadioGroup` add missing `getRadioAtIndex` to enzyme testkit [1398](https://github.com/wix/wix-style-react/pull/1398)
+
+## 2.0.15 - 2018-01-24
+### Changed
+- Made `wix-ui-test-utils` a depenedency
+
+## 2.0.15 - 2018-01-23
+### Added
+- `<Page/>` Added `fullScreen` prop to Content [1388](https://github.com/wix/wix-style-react/pull/1388)
+
+### Fixed
+- `<Page/>` Rendering issues [1381](https://github.com/wix/wix-style-react/pull/1381)
+
+## 2.0.14 - 2018-01-23
+### Added
+- Add method `click` to `Card.ButtonHeader` testkit [1385](https://github.com/wix/wix-style-react/pull/1385)
+
+### Fixed
+- `<Page/>` Add calcualtion when leaving minimized state [1381](https://github.com/wix/wix-style-react/pull/1381)
+- Page background image [1387](https://github.com/wix/wix-style-react/pull/1387)
+
+## 2.0.13 - 2018-01-22
+### Changed
+- InputArea remove hasCounter class [1322](https://github.com/wix/wix-style-react/pull/1322)
+- Fix modal height [1378](https://github.com/wix/wix-style-react/pull/1378)
+
+### Deprecated
+- `<ButtonSelection/>` is no longer available [1362](https://github.com/wix/wix-style-react/pull/1362)
+
+## 2.0.12 - 2018-01-17
+### Added
+- add generic data-hooks to `Tag` and `TooltipContent` & `<TabsItem/>` components [1371](https://github.com/wix/wix-style-react/pull/1371) [1361](https://github.com/wix/wix-style-react/pull/1361)
+
+### Changed
+- `<TabItem/>` - use `propType.node` for `title` [1372](https://github.com/wix/wix-style-react/pull/1372)
+- update `MoveTo`, `FoodInstock` & `FoodOutOfStock` icons [0ae2ca04e](https://github.com/wix/wix-style-react/commit/0ae2ca04e4faec5972c96c30af14831515c4ee25)
+
+## 2.0.11 - 2018-01-15
+### Fixed
+- `<Page/>` can receive `sidePadding` without `maxWidth`
+
+### Changed
+- `<Notification/>` - no longer require `size`, choose it automatically [1356](https://github.com/wix/wix-style-react/pull/1356)
+
+## 2.0.9 - 2018-01-11
+### Added
+- Add `sidePadding` props to `<Page/>` [1354](https://github.com/wix/wix-style-react/pull/1354)
+
+## 2.0.8 - 2018-01-11
+### Changed
+- `<Dropdown/>` - close dropdown when clicking header [1352](https://github.com/wix/wix-style-react/pull/1352)
+- Add new icons `Lock` and `LockOpen` [1341](https://github.com/wix/wix-style-react/pull/1341)
+- Add PropType `node` to `backLabel` in `SideMenuDrill` [1348](https://github.com/wix/wix-style-react/pull/1348)
+
+### Fixed
+- `<TimeInput/>` - Move width property to wrapper [1349](https://github.com/wix/wix-style-react/pull/1349)
+- `<Dropdown/>` - use cursor pointer [1346](https://github.com/wix/wix-style-react/pull/1346)
+- `<TextLink/>` - fix `doesComponentHasClass` teskit method
+
+## 2.0.7 - 2018-01-10
+### Added
+- Add `width` and `height` props to `<imageViewer/>` [1340](https://github.com/wix/wix-style-react/pull/1340)
+- Add `type="button"` for missing places in the project [1339](https://github.com/wix/wix-style-react/pull/1339)
+
+### Fixed
+- fix `<HBox/>` & `<VBox/>` [1345](https://github.com/wix/wix-style-react/pull/1345)
+Fixed tabs styling bug
+
+
+## 2.0.6 - 2018-01-09
+### Added
+- `<PopoverMenu/>` - support `buttonHeight` [1335](https://github.com/wix/wix-style-react/pull/1335)
+
+### Changed
+- upgrade enzyme to 3.3.0 [1330](https://github.com/wix/wix-style-react/pull/1330)
+
+## 2.0.4 - 2018-01-04
+### Fixed
+- `<SideMenu/>` - Fix sidebar menu items being hidden [1326](https://github.com/wix/wix-style-react/pull/1326)
+- various UI alignments [1300](https://github.com/wix/wix-style-react/pull/1300)
+- `<MultiSelect/>` - Save multiselect input on blur [1316](https://github.com/wix/wix-style-react/pull/1316)
+
+### Changed
+- `<StatsWidget/>` - Switch stats widget to use button with options from dropdown [1320](https://github.com/wix/wix-style-react/pull/1320)
+- `<ModalSelectorLayout/>` - allow `node` in `title` & `subtitle` props
+- `<RadioGroup.Button>` - add `content` prop for additional, non label, nodes [1327](https://github.com/wix/wix-style-react/pull/1327)
+
+### Added
+- `<Tabs/>` - new type `compactSide` [1291](https://github.com/wix/wix-style-react/pull/1291)
+
+## 2.0.3 - 2017-12-12
+### Fixed
+
+- `SideMenuDrill` - Fix empty menu level [1297](https://github.com/wix/wix-style-react/pull/1297)
+- Fix exclamation icon blocking interaction on entire row [1311](https://github.com/wix/wix-style-react/pull/1311)
+- `DropdownLayout` - Fix drop down rtl options are left aligned [1310](https://github.com/wix/wix-style-react/pull/1310)
+
+### Added
+- `Slider` - Add Testkit and e2e [1303](https://github.com/wix/wix-style-react/pull/1303)
+- `DropdownLayout` - Added optionsContent to driver [1308](https://github.com/wix/wix-style-react/pull/1308)
+- `Icons` - Add new icons and update Google, Facebook, Code and Yandex [1307](https://github.com/wix/wix-style-react/pull/1307)
+- `ButtonLayout` - Added icon button styles for `heightlarge` [1313](https://github.com/wix/wix-style-react/pull/1313)
+
 ## 2.0.2 - 2017-12-26
 ### Fixed
 - fix css name collision between tooltip and button [1276](https://github.com/wix/wix-style-react/pull/1276)

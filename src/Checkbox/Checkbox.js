@@ -2,15 +2,23 @@ import React from 'react';
 import {node, bool, func, oneOf, string} from 'prop-types';
 import uniqueId from 'lodash/uniqueId';
 import classNames from 'classnames';
+import CheckboxChecked from 'wix-ui-icons-common/system/CheckboxChecked';
+import CheckboxIndeterminate from 'wix-ui-icons-common/system/CheckboxIndeterminate';
 
 import styles from './Checkbox.scss';
-import SvgV from '../svg/V';
 import WixComponent from '../BaseComponents/WixComponent';
 import Label from '../Label/Label';
+import {withFocusable, focusableStates} from '../common/Focusable';
 
 /** a simple WixStyle checkbox */
 class Checkbox extends WixComponent {
   static displayName = 'Checkbox';
+
+  constructor(props) {
+    super(props);
+
+    this.state = {isFocused: false};
+  }
 
   static propTypes = {
     /** used for automatic testing */
@@ -48,12 +56,15 @@ class Checkbox extends WixComponent {
       hover,
       active,
       size,
-      onChange
+      onChange,
+      children
     } = this.props;
 
     const classname = classNames(
       styles.root,
-      checked ? styles.checked : styles.unchecked,
+      indeterminate ? styles.indeterminate :
+      checked ? styles.checked :
+      styles.unchecked,
       {
         [styles.hover]: hover,
         [styles.active]: active,
@@ -62,10 +73,18 @@ class Checkbox extends WixComponent {
       }
     );
 
-    const checkedSymbol = indeterminate ? <div className={styles.indeterminate}/> : <SvgV/>;
-
+    /*
+    NOTE: attaching Focusable handlers to root div (when the tabindex was on the main div under the label) is not working. The onFocus does not get
+    called when clicking on the text (the children). So I moved the tabindex to the root.
+    */
     return (
-      <div className={classname}>
+      <div
+        className={classname}
+        onFocus={this.props.focusableOnFocus}
+        onBlur={this.props.focusableOnBlur}
+        {...focusableStates(this.props)}
+        tabIndex={disabled ? null : 0}
+        >
         <input
           type="checkbox"
           id={id}
@@ -75,20 +94,32 @@ class Checkbox extends WixComponent {
           style={{display: 'none'}}
           />
 
-        <Label for={id} appearance="T1.1">
-          <div className={classNames(styles.checkbox, styles[size])}>
-            <div className={styles.inner}>
-              {checkedSymbol}
+        <Label
+          for={id}
+          appearance={disabled ? 'T1.4' : 'T1.1'}
+          dataHook="checkbox-label"
+          >
+          <div
+            data-hook="checkbox-box"
+            className={classNames(styles.checkbox, styles[size])}
+            >
+            <div
+              className={styles.inner}
+              onClick={e => e.stopPropagation()}
+              >
+              {indeterminate ? <CheckboxIndeterminate/> : <CheckboxChecked/>}
             </div>
           </div>
 
-          <div className={styles.children}>
-            {this.props.children}
-          </div>
+          { children &&
+            <div className={styles.children} data-hook="checkbox-children">
+              {children}
+            </div>
+          }
         </Label>
       </div>
     );
   }
 }
 
-export default Checkbox;
+export default withFocusable(Checkbox);

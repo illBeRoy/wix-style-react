@@ -5,6 +5,7 @@ import {createDriverFactory} from '../../test-common';
 import {textLinkLayoutTestkitFactory} from '../../../testkit';
 import {textLinkLayoutTestkitFactory as enzymeTextLinkLayoutTestkitFactory} from '../../../testkit/enzyme';
 import {isTestkitExists, isEnzymeTestkitExists} from '../../../testkit/test-common';
+import {mount} from 'enzyme';
 
 describe('TextLinkLayout', () => {
 
@@ -34,8 +35,13 @@ describe('TextLinkLayout', () => {
   });
 
   it('should be with dark background', () => {
-    const driver = createDriver(<TextLinkLayout darkBackground size="small"/>);
+    const driver = createDriver(<TextLinkLayout theme="darkBackground" size="small"/>);
     expect(driver.isDarkBackground()).toBeTruthy();
+  });
+
+  it('should be with greyscale theme', () => {
+    const driver = createDriver(<TextLinkLayout theme="greyScale" size="small"/>);
+    expect(driver.isGreyScale()).toBeTruthy();
   });
 
   it('should be with light background', () => {
@@ -84,6 +90,6 @@ describe('testkit', () => {
 
 describe('enzyme testkit', () => {
   it('should exist', () => {
-    expect(isEnzymeTestkitExists(<TextLinkLayout/>, enzymeTextLinkLayoutTestkitFactory)).toBe(true);
+    expect(isEnzymeTestkitExists(<TextLinkLayout/>, enzymeTextLinkLayoutTestkitFactory, mount)).toBe(true);
   });
 });

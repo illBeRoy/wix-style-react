@@ -1,17 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styles from './Tag.scss';
+import Close from 'wix-ui-icons-common/system/Close';
 import classNames from 'classnames';
+import styles from './Tag.scss';
 import WixComponent from '../BaseComponents/WixComponent';
 import Typography from '../Typography';
-import SmallX from '../Icons/dist/components/SmallX';
 
 /**
   * A Tag component
   */
 class Tag extends WixComponent {
   render() {
-    const {id, children, thumb, removable, onRemove, size, wrap, disabled, theme} = this.props;
+    const {id, children, thumb, removable, onClick, onRemove, size, wrap, disabled, theme, maxWidth} = this.props;
 
     const className = classNames({
       [styles.tag]: true,
@@ -29,10 +29,26 @@ class Tag extends WixComponent {
     const title = wrap ? children : '';
 
     return (
-      <span className={className} disabled={disabled} id={id} title={title}>
+      <span
+        data-hook="tag"
+        className={className}
+        disabled={disabled}
+        id={id}
+        title={title}
+        onClick={() => onClick(id)}
+        style={{
+          maxWidth: `${maxWidth}px`
+        }}
+        >
         {thumb && <span className={styles.thumb}>{thumb}</span>}
         <span className={innerClassName}>{children}</span>
-        {removable && !disabled && <a className={styles.tagRemoveButton} onClick={() => onRemove(id)}><SmallX/></a>}
+        {removable && !disabled && <a
+          className={styles.tagRemoveButton}
+          onClick={event => {
+            event.stopPropagation();
+            onRemove(id);
+          }}
+          ><Close/></a>}
       </span>
     );
   }
@@ -47,7 +63,10 @@ Tag.propTypes = {
   /** The id of the Tag  */
   id: PropTypes.string.isRequired,
 
-  /** Callback function when removing the Tag  */
+  /** Callback function that pass `id` property as parameter when clicking on Tag */
+  onClick: PropTypes.func,
+
+  /** Callback function that pass `id` property as parameter when removing the Tag  */
   onRemove: PropTypes.func,
 
   /** If the Tag is removable then it will contain a small clickable X */
@@ -62,11 +81,15 @@ Tag.propTypes = {
   /** An optional thumb to display as part of the Tag */
   thumb: PropTypes.element,
 
-  /** wether to display elipsis (...) for long content */
+  /** An optional maximum tag width in `px` for cropping. Should be used in pair with `wrap` property  */
+  maxWidth: PropTypes.number,
+
+  /** Whether to display ellipsis (...) for long content */
   wrap: PropTypes.bool
 };
 
 Tag.defaultProps = {
+  onClick: () => {},
   onRemove: () => {},
   size: 'small',
   removable: true,

@@ -6,17 +6,17 @@ export {getStoryUrl, waitForVisibilityOf, scrollToElement} from '../src/test-com
 import inputDriverFactory from '../src/Input/Input.protractor.driver';
 export const inputTestkitFactory = protractorTestkitFactoryCreator(inputDriverFactory);
 
+import richTextAreaDriverFactory from '../src/RichTextArea/RichTextArea.protractor.driver';
+export const richTextAreaTestkitFactory = protractorTestkitFactoryCreator(richTextAreaDriverFactory);
+
+import inputAreaDriverFactory from '../src/InputArea/InputArea.protractor.driver';
+export const inputAreaTestkitFactory = protractorTestkitFactoryCreator(inputAreaDriverFactory);
+
 import labelDriverFactory from '../src/Label/Label.protractor.driver';
 export const labelTestkitFactory = protractorTestkitFactoryCreator(labelDriverFactory);
 
-import badgeDriverFactory from '../src/Badge/Badge.protractor.driver';
-export const badgeTestkitFactory = protractorTestkitFactoryCreator(badgeDriverFactory);
-
 import buttonDriverFactory from '../src/Backoffice/Button/Button.protractor.driver';
 export const buttonTestkitFactory = protractorTestkitFactoryCreator(buttonDriverFactory);
-
-import buttonSelectionDriverFactory from '../src/ButtonSelection/ButtonSelection.protractor.driver';
-export const buttonSelectionTestkitFactory = protractorTestkitFactoryCreator(buttonSelectionDriverFactory);
 
 import tpaButtonDriverFactory from '../src/TPA/Button/Button.protractor.driver';
 export const tpaButtonTestkitFactory = protractorTestkitFactoryCreator(tpaButtonDriverFactory);
@@ -62,6 +62,9 @@ export const textFieldTestkitFactory = protractorTestkitFactoryCreator(textField
 
 import dropdownCompositeDriverFactory from '../src/DropdownComposite/DropdownComposite.protractor.driver';
 export const dropdownCompositeTestkitFactory = protractorTestkitFactoryCreator(dropdownCompositeDriverFactory);
+
+import multiSelectCompositeDriverFactory from '../src/MultiSelectComposite/MultiSelectComposite.protractor.driver';
+export const multiSelectCompositeTestkitFactory = protractorTestkitFactoryCreator(multiSelectCompositeDriverFactory);
 
 import autoCompleteCompositeDriverFactory from '../src/AutoCompleteComposite/AutoCompleteComposite.protractor.driver';
 export const autoCompleteCompositeTestkitFactory = protractorTestkitFactoryCreator(autoCompleteCompositeDriverFactory);
@@ -119,3 +122,17 @@ export const modalSelectorLayoutTestkitFactory = protractorTestkitFactoryCreator
 
 import sliderDriverFactory from '../src/Slider/Slider.protractor.driver';
 export const sliderTestkitFactory = protractorTestkitFactoryCreator(sliderDriverFactory);
+
+import tabsDriverFactory from '../src/Tabs/Tabs.protractor.driver';
+export const tabsTestkitFactory = protractorTestkitFactoryCreator(tabsDriverFactory);
+
+import drillViewDriverFactory from '../src/SideMenu/DrillView/DrillView.protractor.driver';
+export const drillViewTestkitFactory = protractorTestkitFactoryCreator(drillViewDriverFactory);
+
+// wix-ui-backoffice proxy
+
+export {
+  badgeTestkitFactory,
+  stylableCounterBadgeTestkitFactory as counterBadgeTestkitFactory,
+  headingTestkitFactory
+} from 'wix-ui-backoffice/dist/src/testkit/protractor';

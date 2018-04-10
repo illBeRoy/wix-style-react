@@ -53,7 +53,7 @@ describe('multiSelect', () => {
     expect(dropdownLayoutDriver.optionsLength()).toBe(options.length);
   });
 
-  it('should not loose Focus or close the list on selection with a mouse click', () => {
+  it('should not lose Focus or close the list on selection with a mouse click', () => {
     const {driver, inputDriver, dropdownLayoutDriver} = createDriver(<MultiSelect options={options}/>);
     driver.focus();
     dropdownLayoutDriver.clickAtOption(0);
@@ -61,7 +61,7 @@ describe('multiSelect', () => {
     expect(inputDriver.isFocus());
   });
 
-  it('should not loose Focus or close the list on selection with enter press', () => {
+  it('should not lose Focus or close the list on selection with enter press', () => {
     const {driver, inputDriver, dropdownLayoutDriver} = createDriver(<MultiSelect options={options}/>);
     driver.focus();
     driver.pressDownKey();
@@ -70,7 +70,7 @@ describe('multiSelect', () => {
     expect(inputDriver.isFocus()).toBeTruthy();
   });
 
-  it('should not loose Focus or close the list on selection with tab press', () => {
+  it('should not lose Focus or close the list on selection with tab press', () => {
     const onSelect = jest.fn();
     const {driver, inputDriver, dropdownLayoutDriver} = createDriver(<MultiSelect options={options} onSelect={onSelect}/>);
     driver.focus();
@@ -81,7 +81,7 @@ describe('multiSelect', () => {
     expect(inputDriver.isFocus()).toBeTruthy();
   });
 
-  it('should not loose Focus or close the list on selection with comma press', () => {
+  it('should not lose Focus or close the list on selection with comma press', () => {
     const onSelect = jest.fn();
     const onChange = jest.fn();
     const {driver, inputDriver, dropdownLayoutDriver} = createDriver(
@@ -93,6 +93,27 @@ describe('multiSelect', () => {
     expect(onChange).toBeCalledWith({target: {value: ''}});
     expect(dropdownLayoutDriver.isShown()).toBeTruthy();
     expect(inputDriver.isFocus()).toBeTruthy();
+  });
+
+  it('should call onSelect on click-outside if options empty', () => {
+    const onSelect = jest.fn();
+    const {driver} = createDriver(<MultiSelect value={'bob'} onSelect={onSelect}/>);
+    driver.outsideClick();
+    expect(onSelect).toBeCalledWith([{id: 'bob', label: 'bob'}]);
+  });
+
+  it('should not call onSelect on click-outside if options is not empty', () => {
+    const onSelect = jest.fn();
+    const {driver} = createDriver(<MultiSelect value={'bob'} options={options} onSelect={onSelect}/>);
+    driver.outsideClick();
+    expect(onSelect.mock.calls.length).toBe(0);
+  });
+
+  it('should not call onSelect on click-outside if input is empty', () => {
+    const onSelect = jest.fn();
+    const {driver} = createDriver(<MultiSelect value={''} onSelect={onSelect}/>);
+    driver.outsideClick();
+    expect(onSelect.mock.calls.length).toBe(0);
   });
 
   it('should support custom delimiters', () => {
@@ -171,10 +192,11 @@ describe('multiSelect', () => {
     inputDriver.trigger('paste');
     inputDriver.enterText(`${options[0].value}, Arkansa`);
     expect(onChange).toBeCalledWith({target: {value: ''}});
-    expect(onSelect).toBeCalledWith([
-      {id: options[0].id, label: options[0].value},
-      {id: 'customOption_1', label: 'Arkansa', theme: 'error'}
-    ]);
+    const onSelectCallArgs = onSelect.mock.calls[0][0];
+    expect(onSelectCallArgs[0]).toEqual({id: options[0].id, label: options[0].value});
+    expect(onSelectCallArgs[1].label).toEqual('Arkansa');
+    expect(onSelectCallArgs[1].theme).toEqual('error');
+    expect(onSelectCallArgs[1].id.startsWith('customOption_')).toEqual(true);
   });
 
   it('should call onManuallyInput after delimiter is pressed and input is not empty', () => {
@@ -263,6 +285,26 @@ describe('multiSelect', () => {
       expect(multiSelectTestkit.inputDriver.exists()).toBeTruthy();
       expect(multiSelectTestkit.dropdownLayoutDriver.exists()).toBeTruthy();
       expect(multiSelectTestkit.driver.getTagDriverByTagId('Alabama').exists()).toBeTruthy();
+    });
+  });
+  describe('hover on tags theme', () => {
+    it('should add hover class when hover and no element selected', () => {
+      const dataHook = 'myDataHook';
+      const wrapper = mount(<MultiSelect dataHook={dataHook} tags={[]}/>);
+      const multiSelectTestkit = enzymeMultiSelectTestkitFactory({wrapper, dataHook});
+      multiSelectTestkit.inputDriver.mouseOver();
+      expect(multiSelectTestkit.inputDriver.isHoveredStyle()).toBeTruthy();
+      multiSelectTestkit.inputDriver.mouseOut();
+      expect(multiSelectTestkit.inputDriver.isHoveredStyle()).toBeFalsy();
+    });
+
+    it('should not add hover style when there is one tag or more', () => {
+      const dataHook = 'myDataHook';
+      const tags = [{id: 'Alabama', label: 'Alabama'}];
+      const wrapper = mount(<MultiSelect dataHook={dataHook} tags={tags}/>);
+      const multiSelectTestkit = enzymeMultiSelectTestkitFactory({wrapper, dataHook});
+      multiSelectTestkit.inputDriver.mouseOver();
+      expect(multiSelectTestkit.inputDriver.isHoveredStyle()).toBeFalsy();
     });
   });
 });

@@ -43,7 +43,8 @@ const ButtonLayout = props => {
 
 ButtonLayout.defaultProps = {
   height: 'medium',
-  theme: 'fullblue'
+  theme: 'fullblue',
+  type: 'button'
 };
 
 ButtonLayout.propTypes = {
@@ -52,7 +53,7 @@ ButtonLayout.propTypes = {
   disabled: bool,
 
   /** The size of the button */
-  height: oneOf(['small', 'medium', 'large', 'x-large']),
+  height: oneOf(['x-small', 'small', 'medium', 'large', 'x-large']),
   hover: bool,
 
   /** When true the button will match its parent width */
@@ -85,8 +86,11 @@ ButtonLayout.propTypes = {
     'icon-white',
     'icon-whitesecondary',
     'no-border',
-    'dark-no-border'
-  ])
+    'dark-no-border',
+    'outlined'
+  ]),
+
+  type: oneOf(['button', 'submit', 'reset'])
 };
 
 ButtonLayout.displayName = 'ButtonLayout';

@@ -105,17 +105,25 @@ $material-gap: 8px;
   &-normal {
     @include ThemeDefault($color: $D10, $borderColor: $B30, $backgroundColor: $D80);
     @include ThemeHover($backgroundColor: $B50);
-    @include ThemeFocus($borderColor: $B20, $boxShadow: inset 0px 0px 5px 0px fade($B10, 60%));
-    @include ThemeError($borderColor: $paletteR1, $boxShadow: inset 0px 0px 5px 0px fade($R10, 60%));
+    @include ThemeFocus;
+    @include ThemeError($borderColor: $paletteR1);
     @include ThemeDisable($color: $D55, $borderColor: $D60, $backgroundColor: $D80);
     @include ThemeDisableHover($borderColor: $GR20);
   }
   &-paneltitle {
     @include ThemeDefault($color: white, $borderColor: #c1e4fe, $backgroundColor: rgba(22,45,61,0.6));
     @include ThemeHover($backgroundColor: rgba(22,45,61,0.4));
-    @include ThemeFocus($borderColor: #4eb7f5, $boxShadow: inset 0 0 5px 0 rgba(56,153,236,0.6));
-    @include ThemeError($borderColor: $paletteR1, $boxShadow: inset 0px 0px 5px 0px fade($R10, 60%));
+    @include ThemeFocusPanelTile($borderColor: #4eb7f5, $boxShadow: inset 0 0 5px 0 rgba(56,153,236,0.6));
+    @include ThemeError($borderColor: $paletteR1);
     @include ThemeDisable($color: white, $borderColor: $GR40, $backgroundColor: rgba(22,45,61,0.6));
+  }
+  &-tags {
+    @include ThemeDefault($color: $D10, $borderColor: $B30, $backgroundColor: transparent);
+    @include ThemeHover($backgroundColor: $B50);
+    @include ThemeFocus;
+    @include ThemeError($borderColor: $paletteR1, $boxShadow: inset 0px 0px 5px 0px fade($R10, 60%));
+    @include ThemeDisable($color: $D55, $borderColor: $D60, $backgroundColor: $D80);
+    @include ThemeDisableHover($borderColor: $GR20);
   }
   &-amaterial {
 
@@ -145,9 +153,9 @@ $material-gap: 8px;
 
     .input {
       @include FontLight();
-      @include Placeholder(rgba(0, 0, 0, 0));
+      opacity: 0;
       z-index: 1;
-      transition: border-bottom .3s, border-color .3s, border-width .3s, border .3s ease-in-out;
+      transition: border-bottom .3s, border-color .3s, border-width .3s, border .3s, opacity 0s ease-in-out;
       line-height: 1;
       display: block;
       margin-top: 0;
@@ -165,6 +173,8 @@ $material-gap: 8px;
     &.hasValue {
       .input {
         @include Placeholder($paletteE6);
+        transition: opacity 0.3s ease-in-out;
+        opacity: 1;
       }
       input {
         border-bottom: 0;
@@ -206,10 +216,11 @@ $material-gap: 8px;
         width:100%;
       }
     }
-
-    .input:hover ~ .barBlue, .input.hasHover ~ .barBlue {
-      background-color: #000;
-      transition: 0.3s ease all;
+    &:hover:not(.disabled) {
+      .bar, .input:hover ~ .barBlue, .input.hasHover ~ .barBlue {
+        background-color: #000;
+        transition: 0.3s ease all;
+      }
     }
 
     &.hasError {
@@ -347,8 +358,12 @@ $material-gap: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #fff;
 
-  path { stroke: #fff; }
+  > svg {
+    width: 10px;
+    height: 10px;
+  }
 }
 
 .help {

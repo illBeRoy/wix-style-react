@@ -10,7 +10,7 @@ import OrderedList from './../Icons/dist/components/OrderedList';
 import Link from './../Icons/dist/components/Link';
 import Image from './../Icons/dist/components/Image';
 import styles from './RichTextAreaButton.scss';
-
+import {withFocusable, focusableStates} from '../common/Focusable';
 const buttons = {
   bold: {
     icon: Bold,
@@ -50,6 +50,7 @@ const buttons = {
 };
 
 class RichTextAreaButton extends Component {
+
   handleMouseDown = event => {
     event.preventDefault();
     if (!this.props.disabled) {
@@ -76,9 +77,13 @@ class RichTextAreaButton extends Component {
         disabled={isTooltipDisabled}
         >
         <button
+          type="button"
           className={className}
-          onMouseDown={this.handleMouseDown}
           data-hook={`rich-text-area-button-${type}`}
+          {...focusableStates(this.props)}
+          onFocus={this.props.focusableOnFocus} // eslint-disable-line react/prop-types
+          onBlur={this.props.focusableOnBlur} // eslint-disable-line react/prop-types
+          onMouseDown={this.handleMouseDown} // override focusable's onMouseDown
           >
           <span className={styles.wrapper}>
             {this.renderIcon()}
@@ -92,6 +97,7 @@ class RichTextAreaButton extends Component {
     const {icon: Icon, size} = buttons[this.props.type];
     return <Icon size={`${size}px`}/>;
   }
+
 }
 
 RichTextAreaButton.propTypes = {
@@ -102,4 +108,4 @@ RichTextAreaButton.propTypes = {
   disabled: PropTypes.bool
 };
 
-export default RichTextAreaButton;
+export default withFocusable(RichTextAreaButton);

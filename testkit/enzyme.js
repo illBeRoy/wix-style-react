@@ -1,8 +1,5 @@
 import {enzymeTestkitFactoryCreator} from '../src/test-common';
 
-import buttonSelectionDriverFactory from '../src/ButtonSelection/ButtonSelection.driver';
-export const buttonSelectionTestkitFactory = enzymeTestkitFactoryCreator(buttonSelectionDriverFactory);
-
 import inputDriverFactory from '../src/Input/Input.driver';
 export const inputTestkitFactory = enzymeTestkitFactoryCreator(inputDriverFactory);
 
@@ -80,6 +77,9 @@ export const dropdownCompositeTestkitFactory = enzymeTestkitFactoryCreator(dropd
 
 import autoCompleteCompositeDriverFactory from '../src/AutoCompleteComposite/AutoCompleteComposite.driver';
 export const autoCompleteCompositeTestkitFactory = enzymeTestkitFactoryCreator(autoCompleteCompositeDriverFactory);
+
+import multiSelectCompositeDriverFactory from '../src/MultiSelectComposite/MultiSelectComposite.driver';
+export const multiSelectCompositeTestkitFactory = enzymeTestkitFactoryCreator(multiSelectCompositeDriverFactory);
 
 import loaderDriverFactory from '../src/Loader/Loader.driver';
 export const loaderTestkitFactory = enzymeTestkitFactoryCreator(loaderDriverFactory);
@@ -171,9 +171,6 @@ export const fieldLabelAttributesTestkitFactory = enzymeTestkitFactoryCreator(fi
 import popoverMenuDriverFactory from '../src/PopoverMenu/PopoverMenu.driver';
 export const popoverMenuTestkitFactory = enzymeTestkitFactoryCreator(popoverMenuDriverFactory);
 
-import badgeDriverFactory from '../src/Badge/Badge.driver';
-export const badgeTestkitFactory = enzymeTestkitFactoryCreator(badgeDriverFactory);
-
 import datePickerFactory from '../src/DatePicker/DatePicker.driver';
 export const datePickerTestkitFactory = enzymeTestkitFactoryCreator(datePickerFactory);
 
@@ -200,3 +197,14 @@ export const statsWidgetTestkitFactory = enzymeTestkitFactoryCreator(statsWidget
 
 import modalSelectorLayoutDriverFactory from '../src/ModalSelectorLayout/ModalSelectorLayout.driver';
 export const modalSelectorLayoutTestkitFactory = enzymeTestkitFactoryCreator(modalSelectorLayoutDriverFactory);
+
+import sectionHelperDriverFactory from '../src/SectionHelper/SectionHelper.driver';
+export const sectionHelperTestkitFactory = enzymeTestkitFactoryCreator(sectionHelperDriverFactory);
+
+// wix-ui-backoffice proxy
+
+export {
+  badgeTestkitFactory,
+  stylableCounterBadgeTestkitFactory as counterBadgeTestkitFactory,
+  headingTestkitFactory
+} from 'wix-ui-backoffice/dist/src/testkit/enzyme';

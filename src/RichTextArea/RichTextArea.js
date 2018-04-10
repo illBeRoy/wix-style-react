@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import FormFieldError from 'wix-ui-icons-common/system/FormFieldError';
 import WixComponent from '../BaseComponents/WixComponent';
 import {Editor, Block} from 'slate';
 import Tooltip from '../Tooltip';
-import SvgExclamation from '../svg/Exclamation.js';
 import RichTextEditorToolbar from './RichTextAreaToolbar';
 import htmlSerializer from './htmlSerializer';
 import styles from './RichTextArea.scss';
@@ -289,13 +289,13 @@ class RichTextArea extends WixComponent {
     const {error, placeholder, disabled, resizable, onImageRequest, dataHook} = this.props;
     const className = classNames(styles.container, {
       [styles.withError]: error,
-      [styles.isFocused]: editorState.isFocused,
+      [styles.isEditorFocused]: editorState.isFocused,
     });
     const isScrollable = resizable || this.props.maxHeight;
 
     return (
       <div className={className} data-hook={dataHook}>
-        <div className={classNames(styles.toolbar, {[styles.disabled]: disabled})}>
+        <div className={classNames(styles.toolbar, {[styles.disabled]: disabled})} data-hook='toolbar'>
           <RichTextEditorToolbar
             disabled={disabled}
             onClick={this.handleButtonClick}
@@ -352,7 +352,7 @@ class RichTextArea extends WixComponent {
         content={errorMessage}
         theme="dark"
         >
-        <div className={styles.exclamation}><SvgExclamation width={2} height={11}/></div>
+        <div className={styles.exclamation}><FormFieldError/></div>
       </Tooltip>
     );
   };

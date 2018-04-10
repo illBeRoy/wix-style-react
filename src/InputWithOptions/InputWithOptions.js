@@ -103,7 +103,7 @@ class InputWithOptions extends WixComponent {
       (this.props.showOptionsIfEmptyInput || this.state.inputValue.length > 0);
 
     return (
-      <div className={this.dropdownClasses()} style={customStyle}>
+      <div className={this.dropdownClasses()} style={customStyle} data-hook="dropdown-layout-wrapper">
         <DropdownLayout
           ref={dropdownLayout => this.dropdownLayout = dropdownLayout}
           {...dropdownProps}
@@ -145,7 +145,7 @@ class InputWithOptions extends WixComponent {
     return this.props.closeOnSelect;
   }
 
-  _onManuallyInput(inputValue) {
+  _onManuallyInput(inputValue = '') {
     if (this.state.isComposing) {
       return;
     }
@@ -197,7 +197,7 @@ class InputWithOptions extends WixComponent {
     }
   }
 
-  _onFocus() {
+  _onFocus(e) {
     if (this.props.disabled) {
       return;
     }
@@ -205,7 +205,7 @@ class InputWithOptions extends WixComponent {
     this.setState({isEditing: false});
     this.showOptions();
     if (this.props.onFocus) {
-      this.props.onFocus();
+      this.props.onFocus(e);
     }
   }
 

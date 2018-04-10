@@ -3,14 +3,14 @@ import {datePickerTestkitFactory, getStoryUrl} from '../../testkit/protractor';
 import autoExampleDriver from 'wix-storybook-utils/AutoExampleDriver';
 
 describe('DatePicker', () => {
-  const storyUrl = getStoryUrl('Core', 'DatePicker');
+  const storyUrl = getStoryUrl('3. Inputs', '3.6 DatePicker');
   const {inputDriver, calendarDriver} = datePickerTestkitFactory({dataHook: 'storybook-datepicker'});
 
   beforeAll(() => {
     browser.get(storyUrl);
   });
 
-  afterEach(() => {
+  beforeEach(() => {
     autoExampleDriver.reset();
   });
 
@@ -24,7 +24,8 @@ describe('DatePicker', () => {
   eyes.it('should not close calendar on selecting date with click when shouldCloseOnSelect prop set to false', () => {
     autoExampleDriver.setProps({shouldCloseOnSelect: false});
     inputDriver.click();
-    calendarDriver.clickOnNthAvailableDay(1);
+
+    calendarDriver.clickOnNthAvailableDay(10);
 
     expect(calendarDriver.exists()).toBe(true);
     expect(calendarDriver.isVisible()).toBe(true);
@@ -37,7 +38,6 @@ describe('DatePicker', () => {
 
     eyes.it('should open calendar when click on inputDriver', () => {
       inputDriver.click();
-
       expect(calendarDriver.exists()).toBe(true);
       expect(calendarDriver.isVisible()).toBe(true);
     });
@@ -45,7 +45,6 @@ describe('DatePicker', () => {
     eyes.it('should close calendar on selecting date with click', () => {
       inputDriver.click();
       calendarDriver.clickOnNthAvailableDay(1);
-
       expect(calendarDriver.exists()).toBe(false);
     });
 
@@ -66,35 +65,45 @@ describe('DatePicker', () => {
     });
 
     eyes.it('should not change date', () => {
+      autoExampleDriver.setProps({value: new Date('2017/05/01')});
       inputDriver.click();
       inputDriver.pressEnterKey();
 
-      expect(inputDriver.getValue()).toBe('2017/01/01');
+      expect(inputDriver.getValue()).toBe('2017/05/01');
     });
 
     eyes.it('should select next day date', () => {
+      autoExampleDriver.setProps({value: new Date('2017/05/01')});
       inputDriver.click();
       inputDriver.pressArrowRightKey();
       inputDriver.pressEnterKey();
 
-      expect(inputDriver.getValue()).toBe('2017/01/02');
+      expect(inputDriver.getValue()).toBe('2017/05/02');
     });
   });
 
   describe('with year and month dropdown', () => {
+    beforeEach(() =>
+      autoExampleDriver.setProps({
+        showYearDropdown: true,
+        showMonthDropdown: true,
+        value: new Date('2017/05/01')
+      })
+    );
+
     eyes.it('should select 2027 year', () => {
-      autoExampleDriver.setProps({showYearDropdown: true, showMonthDropdown: true});
       inputDriver.click();
+
       calendarDriver.openYearDropdownOptions();
       calendarDriver.clickOnNthYear();
       calendarDriver.clickOnNthAvailableDay();
 
-      expect(inputDriver.getValue()).toBe('2027/01/01');
+      expect(inputDriver.getValue()).toBe('2027/05/01');
     });
 
     eyes.it('should select February', () => {
-      autoExampleDriver.setProps({showYearDropdown: true, showMonthDropdown: true});
       inputDriver.click();
+
       calendarDriver.openMonthDropdownOptions();
       calendarDriver.clickOnNthMonth(2);
       calendarDriver.clickOnNthAvailableDay();
@@ -102,16 +111,16 @@ describe('DatePicker', () => {
       expect(inputDriver.getValue()).toBe('2017/02/01');
     });
 
-    eyes.it('should select January and 2027 year', () => {
-      autoExampleDriver.setProps({showYearDropdown: true, showMonthDropdown: true});
+    eyes.it('should select February and 2026 year', () => {
       inputDriver.click();
+
       calendarDriver.openYearDropdownOptions();
-      calendarDriver.clickOnNthYear();
+      calendarDriver.clickOnNthYear(2);
       calendarDriver.openMonthDropdownOptions();
-      calendarDriver.clickOnNthMonth();
+      calendarDriver.clickOnNthMonth(2);
       calendarDriver.clickOnNthAvailableDay();
 
-      expect(inputDriver.getValue()).toBe('2027/01/01');
+      expect(inputDriver.getValue()).toBe('2026/02/01');
     });
   });
 });

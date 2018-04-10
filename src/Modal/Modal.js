@@ -25,7 +25,7 @@ class Modal extends WixComponent {
     height: PropTypes.string,
     overlayPosition: PropTypes.oneOf(Object.keys(positions)),
     parentSelector: PropTypes.func
-  }
+  };
 
   static defaultProps = {
     onOk: () => {
@@ -41,14 +41,13 @@ class Modal extends WixComponent {
     height: 'auto',
     maxHeight: 'auto',
     overlayPosition: 'fixed'
-  }
+  };
 
   render() {
     const {
       horizontalPosition,
       verticalPosition,
       height,
-      maxHeight,
       scrollableContent,
       borderRadius,
       zIndex,
@@ -65,10 +64,11 @@ class Modal extends WixComponent {
       overlayPosition,
       parentSelector
     } = this.props;
-
+    let {maxHeight} = this.props;
     const justifyContent = flexPositions[horizontalPosition];
     const alignItems = flexPositions[verticalPosition];
-    const customMaxHeight = scrollableContent && maxHeight === 'auto' ? '100vh' : maxHeight;
+
+    maxHeight = scrollableContent && maxHeight === 'auto' ? '100vh' : maxHeight;
 
     const modalStyles = {
       overlay: {
@@ -92,7 +92,7 @@ class Modal extends WixComponent {
         overflowY: scrollableContent ? 'auto' : 'initial',
         overflowX: scrollableContent ? 'hidden' : 'initial',
         height,
-        customMaxHeight,
+        maxHeight,
         WebkitOverflowScrolling: 'touch',
         outline: 'none',
         borderRadius,

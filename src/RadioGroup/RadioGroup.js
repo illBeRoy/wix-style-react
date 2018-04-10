@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import uniqueId from 'lodash/uniqueId';
+import classNames from 'classnames';
+
 import RadioButton from './RadioButton/RadioButton';
 import styles from './RadioGroup.scss';
 import WixComponent from '../BaseComponents/WixComponent';
-import classNames from 'classnames';
 
 /**
  * component for easy radio group creation.
@@ -36,6 +37,7 @@ class RadioGroup extends WixComponent {
             style={style}
             icon={radio.props.icon}
             lineHeight={lineHeight}
+            content={radio.props.content}
             >
             {radio.props.children}
           </RadioGroup.Radio>
@@ -68,7 +70,7 @@ RadioGroup.propTypes = {
   display: PropTypes.oneOf(['vertical', 'horizontal']),
 
   children: PropTypes.arrayOf((propValue, key) => {
-    if (propValue[key].type.name !== 'RadioButton') {
+    if (propValue[key].type.displayName !== RadioButton.displayName) {
       return new Error(`RadioGroup: Invalid Prop children was given. Validation failed on child number ${key}`);
     }
   }),

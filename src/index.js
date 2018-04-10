@@ -4,7 +4,6 @@ import {MessageBoxMarketerialLayout, MessageBoxFunctionalLayout, HeaderLayout, F
 
 export {default as Button} from './Button';
 export {default as ButtonLayout} from './ButtonLayout';
-export {default as ButtonSelection} from './ButtonSelection';
 export {default as Input} from './Input';
 export {default as InputArea} from './InputArea';
 export {default as InputWithOptions} from './InputWithOptions';
@@ -30,6 +29,7 @@ export {default as TimeInput} from './TimeInput';
 export {default as Tooltip} from './Tooltip';
 export {default as SideBar} from './SideBar';
 export {default as Page} from './Page';
+export {default as SectionHelper} from './SectionHelper';
 export {default as PageHeader} from './PageHeader';
 export {default as SideMenu} from './SideMenu';
 export {default as SideMenuDrill} from './SideMenu/DrillView';

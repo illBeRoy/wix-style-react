@@ -5,6 +5,7 @@ import {createDriverFactory} from '../test-common';
 import {radioGroupTestkitFactory} from '../../testkit';
 import {isTestkitExists, isEnzymeTestkitExists} from '../../testkit/test-common';
 import {radioGroupTestkitFactory as enzymeRadioGroupTestkitFactory} from '../../testkit/enzyme';
+import {mount} from 'enzyme';
 
 describe('RadioGroup', () => {
   const createDriver = createDriverFactory(radioGroupDriverFactory);
@@ -27,6 +28,13 @@ describe('RadioGroup', () => {
   it('should check the option that matches the initial value', () => {
     const value = 2;
     const driver = createDriver(elementToRender({value}));
+    expect(driver.getSelectedValue()).toBe(value.toString());
+  });
+
+  it('should update selected value after change to props', () => {
+    const driver = createDriver(elementToRender({value: 1}));
+    const value = 2;
+    driver.setProps({value});
     expect(driver.getSelectedValue()).toBe(value.toString());
   });
 
@@ -73,14 +81,14 @@ describe('RadioGroup', () => {
 
     it('should have a default vcenter class', () => {
       const driver = createDriver(elementToRender());
-      expect(driver.getClassOfLabelAt(0)).toBe('vcenter t1_1');
-      expect(driver.getClassOfLabelAt(1)).toBe('vcenter t1_1');
+      expect(driver.getClassOfLabelAt(0)).toContain('vcenter');
+      expect(driver.getClassOfLabelAt(1)).toContain('vcenter');
     });
 
     it('should have a vtop class', () => {
       const driver = createDriver(elementToRender({vAlign: 'top'}));
-      expect(driver.getClassOfLabelAt(0)).toBe('vtop t1_1');
-      expect(driver.getClassOfLabelAt(1)).toBe('vtop t1_1');
+      expect(driver.getClassOfLabelAt(0)).toContain('vtop');
+      expect(driver.getClassOfLabelAt(1)).toContain('vtop');
     });
   });
 
@@ -115,6 +123,18 @@ describe('RadioGroup', () => {
     });
   });
 
+  describe('label appearance', () => {
+    it('should be T1.1 by default', () => {
+      const driver = createDriver(elementToRender());
+      expect(driver.getClassOfLabelAt(0)).toContain('t1_1');
+    });
+
+    it('should be T1.4 when disabled', () => {
+      const driver = createDriver(elementToRender({disabled: true}));
+      expect(driver.getClassOfLabelAt(0)).toContain('t1_4');
+    });
+  });
+
   describe('testkit', () => {
     it('should exist', () => {
       expect(isTestkitExists(<RadioGroup/>, radioGroupTestkitFactory)).toBe(true);
@@ -123,7 +143,7 @@ describe('RadioGroup', () => {
 
   describe('enzyme testkit', () => {
     it('should exist', () => {
-      expect(isEnzymeTestkitExists(<RadioGroup/>, enzymeRadioGroupTestkitFactory)).toBe(true);
+      expect(isEnzymeTestkitExists(<RadioGroup/>, enzymeRadioGroupTestkitFactory, mount)).toBe(true);
     });
   });
 });

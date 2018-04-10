@@ -1,8 +1,5 @@
 import {testkitFactoryCreator} from '../src/test-common';
 
-import buttonSelectionDriverFactory from '../src/ButtonSelection/ButtonSelection.driver';
-export const buttonSelectionTestkitFactory = testkitFactoryCreator(buttonSelectionDriverFactory);
-
 import inputDriverFactory from '../src/Input/Input.driver';
 export const inputTestkitFactory = testkitFactoryCreator(inputDriverFactory);
 
@@ -80,6 +77,9 @@ export const dropdownCompositeTestkitFactory = testkitFactoryCreator(dropdownCom
 
 import autoCompleteCompositeDriverFactory from '../src/AutoCompleteComposite/AutoCompleteComposite.driver';
 export const autoCompleteCompositeTestkitFactory = testkitFactoryCreator(autoCompleteCompositeDriverFactory);
+
+import multiSelectCompositeDriverFactory from '../src/MultiSelectComposite/MultiSelectComposite.driver';
+export const multiSelectCompositeTestkitFactory = testkitFactoryCreator(multiSelectCompositeDriverFactory);
 
 import loaderDriverFactory from '../src/Loader/Loader.driver';
 export const loaderTestkitFactory = testkitFactoryCreator(loaderDriverFactory);
@@ -165,9 +165,6 @@ export const tpaFloatingTabsTestkitFactory = testkitFactoryCreator(tpaFloatingTa
 import tpaInputDriverFactory from '../src/TPA/Input/Input.driver';
 export const tpaInputTestkitFactory = testkitFactoryCreator(tpaInputDriverFactory);
 
-import tpaBadgeDriverFactory from '../src/TPA/Badge/Badge.driver';
-export const tpaBadgeTestkitFactory = testkitFactoryCreator(tpaBadgeDriverFactory);
-
 import tpaLabelDriverFactory from '../src/TPA/Label/Label.driver';
 export const tpaLabelTestkitFactory = testkitFactoryCreator(tpaLabelDriverFactory);
 
@@ -176,9 +173,6 @@ export const fieldLabelAttributesTestkitFactory = testkitFactoryCreator(fieldLab
 
 import popoverMenuDriverFactory from '../src/PopoverMenu/PopoverMenu.driver';
 export const popoverMenuTestkitFactory = testkitFactoryCreator(popoverMenuDriverFactory);
-
-import badgeDriverFactory from '../src/Badge/Badge.driver';
-export const badgeTestkitFactory = testkitFactoryCreator(badgeDriverFactory);
 
 import datePickerDriverFactory from '../src/DatePicker/DatePicker.driver';
 export const datePickerTestkitFactory = testkitFactoryCreator(datePickerDriverFactory);
@@ -206,3 +200,14 @@ export const statsWidgetTestkitFactory = testkitFactoryCreator(statsWidgetDriver
 
 import modalSelectorLayoutDriverFactory from '../src/ModalSelectorLayout/ModalSelectorLayout.driver';
 export const modalSelectorLayoutTestkitFactory = testkitFactoryCreator(modalSelectorLayoutDriverFactory);
+
+import sectionHelperDriverFactory from '../src/SectionHelper/SectionHelper.driver';
+export const sectionHelperTestkitFactory = testkitFactoryCreator(sectionHelperDriverFactory);
+
+// wix-ui-backoffice proxy
+
+export {
+  badgeTestkitFactory,
+  stylableCounterBadgeTestkitFactory as counterBadgeTestkitFactory,
+  headingTestkitFactory
+} from 'wix-ui-backoffice/dist/src/testkit';

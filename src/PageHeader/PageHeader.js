@@ -3,10 +3,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import WixComponent from '../BaseComponents/WixComponent';
 import classNames from 'classnames';
+import ChevronLeft from 'wix-ui-icons-common/ChevronLeft';
 import Breadcrumbs from '../Breadcrumbs';
 import Text from '../Text';
 import {Animator} from 'wix-animations';
-import {ArrowLeft} from '../Icons';
 import Button from '../Button';
 
 const animateComponent = (show, useEnterDelay, content) => {
@@ -92,13 +92,13 @@ export default class PageHeader extends WixComponent {
               showBackButton && onBackClicked && animateComponent(!minimized, !breadcrumbsExists,
                 <div className={classNames(s.backButton, {[s.minimized]: minimized, [s.darkTheme]: isDarkTheme(hasBackgroundImage, minimized)})} data-hook="page-header-backbutton">
                   <Button onClick={onBackClicked} theme="icon-white">
-                    <ArrowLeft size="16px"/>
+                    <ChevronLeft className={s.backButtonIcon}/>
                   </Button>
                 </div>)
             }
             <div>
               {
-                animateComponent(!minimized, !breadcrumbsExists,
+                title && animateComponent(!minimized, !breadcrumbsExists,
                   <div className={classNames(s.title, {[s.minimized]: minimized})} data-hook="page-header-title">
                     <Text appearance={isDarkTheme(hasBackgroundImage, minimized) ? 'H1.1' : 'H1'}>{title}</Text>
                   </div>)
@@ -126,21 +126,21 @@ export default class PageHeader extends WixComponent {
 PageHeader.displayName = 'Page.Header';
 
 PageHeader.propTypes = {
-  /** The minimize state from the header container */
+  /** This property is being supplied by the Page component, it's value changes by the state of the scrolled content */
   minimized: PropTypes.bool,
-  /** If the page has background image */
+  /** This property is being supplied by the Page component, it's value reflects if the Page has a background image or not */
   hasBackgroundImage: PropTypes.bool,
-  /** Breadcrumbs object to display */
+  /** Wix-Style-React Breadcrumbs component */
   breadcrumbs: PropTypes.node,
-  /** Title to display */
-  title: PropTypes.node.isRequired,
-  /** Subtitle to display */
+  /** The main title text */
+  title: PropTypes.node,
+  /** The subtitle text */
   subtitle: PropTypes.node,
-  /** Should display back button */
+  /** Should show a back button */
   showBackButton: PropTypes.bool,
-  /** Callback when back button clicked */
+  /** The callback when back button is clicked */
   onBackClicked: PropTypes.func,
-  /** Components that includes actions */
+  /** A placeholder for a component that can contain actions / anything else */
   actionsBar: PropTypes.node
 };
 

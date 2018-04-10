@@ -23,6 +23,14 @@ class MultiSelect extends InputWithOptions {
     this.clearInput();
   }
 
+  onClickOutside() {
+    const {value, options, onSelect} = this.props;
+    if (!options.length && value) {
+      onSelect([{id: value.trim(), label: value.trim()}]);
+    }
+    this.hideOptions();
+  }
+
   getUnselectedOptions() {
     const optionIds = this.props.options.map(option => option.id);
     const tagIds = this.props.tags.map(tag => tag.id);
@@ -178,6 +186,7 @@ MultiSelect.propTypes = {
 
 MultiSelect.defaultProps = {
   ...InputWithOptions.defaultProps,
+  theme: 'tags',
   predicate: () => true,
   tags: [],
   delimiters: [',']

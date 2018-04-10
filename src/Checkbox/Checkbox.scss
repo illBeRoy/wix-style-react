@@ -1,14 +1,29 @@
 @import '../common.scss';
+@import '../common/Focusable/Focusable';
 
 .root {
   display: inline-block;
-
+  outline: none;
+  
   label {
     display: flex;
     cursor: pointer;
     justify-content: center;
     align-items: center;
   }
+
+  &#{$focusable-focus-visible} {
+    .checkbox {
+      @include FocusBox;
+    }
+  
+    &.hasError {  
+      .checkbox {
+        @include FocusBoxError;
+      } 
+    }
+  }
+  
 }
 
 .children {
@@ -25,13 +40,13 @@
   }
 }
 
+
 .checkbox {
   position: relative;
   width: 16px;
   min-width: 16px;
   height: 16px;
   min-height: 16px;
-  border: 1px solid $B10;
   border-radius: 4px;
   box-sizing: border-box;
 }
@@ -43,12 +58,17 @@
   .inner {
     width: 18px;
     height: 18px;
-  }
 
-  .inner > svg {
-    width: 13px;
-    height: 13px;
+    > svg {
+      width: 12px;
+      height: 12px;
+    }
   }
+}
+
+.indeterminate .large .inner > svg {
+  width: 10px;
+  height: 10px;
 }
 
 .inner {
@@ -63,24 +83,15 @@
   color: $D80;
 
   > svg {
-    width: 9px;
-    height: 9px;
+    width: 8px;
+    height: 8px;
   }
-
-  > svg > path {
-    fill: #fff;
-  }
-}
-
-.indeterminate {
-  background-color: $D80;
-  width: 8px;
-  height: 2px;
 }
 
 /* Checked State */
-.checked {
+.checked, .indeterminate {
   .checkbox {
+    border: 1px solid $B10;
     background-color: $B10;
 
     .inner {
@@ -92,30 +103,30 @@
 /* Unchecked State */
 
 .unchecked {
-  &:hover,
-  &.hover {
-    .checkbox {
-      background-color: $B40;
-    }
-  }
-
-  &:active,
-  &.active {
-    .checkbox {
-      background-color: $B20;
-
-      .inner {
-        opacity: 1;
-      }
-    }
-  }
-
   .checkbox {
+    border: 1px solid $B20;
     background-color: $D80;
 
     .inner {
       opacity: 0;
     }
+  }
+
+  &.hover .checkbox, .checkbox:hover {
+    background-color: $B50;
+  }
+
+  &.active .checkbox, .checkbox:active {
+    .inner {
+      opacity: 1;
+    }
+  }
+}
+
+.unchecked, .checked {
+  &.active .checkbox, .checkbox:active {
+    border: 1px solid $B20;
+    background-color: $B20;
   }
 }
 
@@ -123,13 +134,17 @@
   pointer-events: none;
   cursor: default;
 
-  &.checked .checkbox {
-    background-color: $GR20;
-  }
-
   .checkbox {
     border-color: $GR20;
     background-color: $D70;
+  }
+
+  &.checked .checkbox {
+    border-color: $D60;
+
+    .inner {
+      color: $D55;
+    }
   }
 }
 
