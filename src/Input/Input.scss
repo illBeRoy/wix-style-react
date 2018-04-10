@@ -29,6 +29,8 @@ $material-gap: 8px;
   border: 0;
   outline: 0;
   background: transparent;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   @include BorderRadius(6px);
   @include FontRoman();
   @include Placeholder($paletteE6);
