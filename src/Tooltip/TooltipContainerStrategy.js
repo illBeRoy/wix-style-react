@@ -4,16 +4,19 @@ const predicates = [
   element => element === document.body
 ];
 
+const neverMatchAnyElement = () => false;
+
 export class TooltipContainerStrategy {
-  constructor(appendTo, appendToParent) {
+  constructor(appendTo, appendToParent, appendByPredicate) {
     this._ancestor = null;
     this._appendTo = appendTo;
     this._appendToParent = appendToParent;
+    this._appendByPredicate = appendByPredicate || neverMatchAnyElement;
   }
 
   _findAncestor(element) {
     while (element) {
-      if (predicates.some(pred => pred(element))) { // eslint-disable-line
+      if ([...predicates, this._appendByPredicate].some(pred => pred(element))) { // eslint-disable-line
         break;
       }
 
