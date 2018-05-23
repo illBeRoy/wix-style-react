@@ -1,22 +1,21 @@
-
-const predicates = [
-  element => element.getAttribute('data-class') === 'page-scrollable-content',
-  element => element === document.body
-];
-
-const neverMatchAnyElement = () => false;
-
 export class TooltipContainerStrategy {
   constructor(appendTo, appendToParent, appendByPredicate) {
+    this._predicates = [
+      element => element.getAttribute('data-class') === 'page-scrollable-content',
+      element => element === document.body
+    ];
+
     this._ancestor = null;
     this._appendTo = appendTo;
     this._appendToParent = appendToParent;
-    this._appendByPredicate = appendByPredicate || neverMatchAnyElement;
+    if (appendByPredicate) {
+      this._predicates.push(appendByPredicate);
+    }
   }
 
   _findAncestor(element) {
     while (element) {
-      if ([...predicates, this._appendByPredicate].some(pred => pred(element))) { // eslint-disable-line
+      if (this._predicates.some(pred => pred(element))) { // eslint-disable-line
         break;
       }
 
